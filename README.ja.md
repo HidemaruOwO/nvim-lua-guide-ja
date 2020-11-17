@@ -159,6 +159,8 @@ require('other_modules') -- other_modules/init.luaをロード
 
 #### パッケージについての注意
 
+**UPDATE**: 最新のnightlyビルドを使用している場合、[問題](https://github.com/neovim/neovim/pull/13119)は解決しているので、このセクションを安全に飛ばすことができます。
+
 `packages`機能やそれをベースとしたパッケージマネージャ([packer.nvim](https://github.com/wbthomason/packer.nvim), [minpac](https://github.com/k-takata/minpac),  [vim-packager](https://github.com/kristijanhusak/vim-packager/)等)を使用している場合、Luaプラグインを使用する際に注意することがあります。
 
 `start`フォルダ内のパッケージは`init.vim`の後に読み込まれます。これは、Neovimの処理が終わるまで`runtimepath`にパッケージが追加されないことを意味します。

@@ -960,9 +960,15 @@ syntax APIはまだ作業中です。いくつかのポインターがありま�
 `vim.lsp`は組込みのLSPクライアントを操作するためのモジュールです。
 [neovim/nvim-lspconfig](https://github.com/neovim/nvim-lspconfig/)は有名なLanguage Serverの設定集です。
 
+クライアントの動作は"lsp-handlers"を使用して設定することができます。詳細はこちら:
+- `:help lsp-handler`
+- [neovim/neovim#12655](https://github.com/neovim/neovim/pull/12655)
+- [How to migrate from diagnostic-nvim](https://github.com/nvim-lua/diagnostic-nvim/issues/73#issue-737897078)
+
+
 LSPクライアントを利用したプラグインも見たいかもしれません。:
 - [nvim-lua/completion-nvim](https://github.com/nvim-lua/completion-nvim)
-- [nvim-lua/diagnostic-nvim](https://github.com/nvim-lua/diagnostic-nvim)
+- [RishabhRD/nvim-lsputils](https://github.com/RishabhRD/nvim-lsputils)
 
 参照:
 - `:help lsp`

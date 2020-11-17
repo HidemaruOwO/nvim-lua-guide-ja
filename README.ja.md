@@ -93,8 +93,8 @@ Luaでプラグインを書くためのチュートリアルが既にいくつ�
 
 ## Luaファイルを置く場所
 
-Luaファイルは通常、`runtimepath`にある`lua/`フォルダにあります(ほとんどの場合、\*nixでは`~/.config/nvim/lua`、Windowsでは`~/AppData/Local/nvim/lua`を意味します)。
-`package.path`と`package.cpath`はこのフォルダにLuaファイルが含まれるように自動的に調整されます。
+Luaファイルは通常、`runtimepath`内の`lua/`フォルダにあります(ほとんどの場合、\*nixでは`~/.config/nvim/lua`、Windowsでは`~/AppData/Local/nvim/lua`を意味します)。
+`package.path`と`package.cpath`は、Luaファイルが含まれるように自動で調整されます。
 これは、Luaモジュールとして`require()`できることを意味します。
 
 例として次のフォルダ構造を取り上げましょう。:
@@ -151,7 +151,7 @@ require('other_modules') -- other_modules/init.luaをロード
 
 #### Tips
 
-いくつかのLuaプラグインは`lua/`フォルダ内に同じ名前のファイルがある場合があります。これにより、名前空間の衝突がおこる可能性があります。
+いくつかのLuaプラグインは`lua/`フォルダ内に同じ名前のファイルがあるかもしれません。これにより、名前空間の衝突を起こす可能性があります。
 
 異なる2つのプラグインに`lua/main.lua`がある場合、`require('main')`は曖昧です。: どのファイルを読み込みますか？
 
@@ -260,7 +260,7 @@ Luaファイルを読み込みます。
 
 - `require()`:
     - Luaの組込み関数です。Luaのモジュールを読み込むのに使用します。
-    - `package.path`変数を使ってモジュールを探します。(前述のように、`runtimepath`にある`lua/`フォルダから`requie()`することができます。)
+    - `package.path`変数を使ってモジュールを探します。(前述のように、`runtimepath`にある`lua/`フォルダから`requie()`できます。)
     - どのモジュールをロードしたかを記憶し、多重に実行されるのを防ぎます。Neovim実行中に、モジュールに含まれるコードを変更し、もう一度`require()`を実行してもモジュールは更新されません。
 - `:luafile`:
     - Exコマンドです。モジュールには対応していません。
@@ -403,7 +403,7 @@ echo map([1, 2, 3], v:lua.global_callback)
 
 ### Tips
 
-設定ファイルに、`let g:vimsyn_embed = 'l'`を追加すると.vimファイル内のLuaを構文ハイライトすることができます。
+設定ファイルに、`let g:vimsyn_embed = 'l'`を追加すると.vimファイル内のLuaを構文ハイライトできます。
 詳細は`:h g:vimsyn_embed`を参照してください。
 
 ## vim名前空間
@@ -421,7 +421,7 @@ NeovimはLuaからAPIを使うためのエントリーポイントとして、`v
 - `vim.treesitter`: tree-sitterライブラリの機能を公開するモジュール
 
 このリストは決して包括的なリストではありません。`vim`変数で何かできるかを詳しく知りたい場合は、`:h lua-stdlib`と`:help lua-vim`が最適です。
-または、`:lua print(vim.inspect(vim))`を実行してすべてのモジュールのリストを取得することもできます。
+または、`:lua print(vim.inspect(vim))`を実行してすべてのモジュールのリストを取得できます。
 
 #### Tips
 
@@ -434,7 +434,7 @@ function _G.dump(...)
 end
 ```
 
-コードまたはコマンドラインからとても早くオブジェクトの中身を検査することができます。
+コードまたはコマンドラインからとても早くオブジェクトの中身を検査できます。
 
 ```lua
 dump({1, 2, 3})
@@ -472,7 +472,7 @@ print(vim.api.nvim_eval('v:null')) -- nil
 
 ### vim.api.nvim_exec()
 
-Vim scriptのチャンクを実行します。実行するソースコートを含む文字列と、コードの出力を返すかどうかを決めるbool値を受け取ります(例えば、出力を変数に格納することができます)。
+Vim scriptのチャンクを実行します。実行するソースコートを含む文字列と、コードの出力を返すかどうかを決めるbool値を受け取ります(例えば、出力を変数に格納できます)。
 
 ```lua
 local result = vim.api.nvim_exec(
@@ -587,7 +587,7 @@ vim.bo.shiftwidth = 4
 print(vim.bo.shiftwidth) -- 4
 ```
 
-バッファとウィンドウの番号を指定することができます。0を指定した場合、カレントバッファ/ウィンドウが使用されます。:
+バッファとウィンドウの番号を指定できます。0を指定した場合、カレントバッファ/ウィンドウが使用されます。:
 
 ```lua
 vim.bo[4].expandtab = true -- same as vim.api.nvim_buf_set_option(4, 'expandtab', true)
@@ -686,11 +686,11 @@ vim.o.expandtab = true
     - `vim.api.nvim_set_vvar()`
     - `vim.api.nvim_get_vvar()`
 
-Vimの定義済み変数を除いて、削除することもできます(Vim scriptの`:unlet`と同様です)。
+Vimの定義済み変数を除いて、削除できます(Vim scriptの`:unlet`と同様です)。
 ローカル変数(`l:`)、スクリプト変数(`s:`)、関数の引数(`a:`)はVim script内でのみ意味があるため操作できません。
 Luaには独自のスコープルールがあります。
 
-これらの変数に不慣れな場合、`:h internal-variables`に説明があります。
+これらの変数が不慣れな場合、`:h internal-variables`に説明があります。
 
 これらの関数は対象の変数名と、設定したい値を含む文字列を受け取ります。
 
@@ -713,7 +713,7 @@ vim.api.nvim_buf_del_var(3, 'some_tabpage_variable')
 
 ### メタアクセサーを使用する
 
-内部の変数はメタアクセサーを使用し、もっと直感的に操作することができます。:
+内部の変数はメタアクセサーを使用し、もっと直感的に操作できます。:
 
 - `vim.g.{name}`: グローバル変数
 - `vim.b.{name}`: バッファ変数
@@ -740,7 +740,7 @@ vim.g.some_global_variable = nil
 
 オプションのメタアクセサーと違い、バッファ/ウィンドウ/タブの変数に番号を指定できません。
 
-さらに、辞書の1つのキーを追加/更新/削除することはできません。例えば、次のVim scriptは期待通りに動きません。:
+さらに、辞書の1つのキーを追加/更新/削除できません。例えば、次のVim scriptは期待通りに動きません。:
 
 ```vim
 let g:variable = {}
@@ -923,7 +923,7 @@ augroupsとautocommandのインターフェイスはまだありません。し�
 
 - [Pull request #12378](https://github.com/neovim/neovim/pull/12378)
 
-いまのところ、Vim scriptで作成するか、ラッパープラグイン([norcalli/nvim_utils](https://github.com/norcalli/nvim_utils/blob/master/lua/nvim_utils.lua#L554-L567))を使用することができます。
+いまのところ、Vim scriptで作成するか、ラッパープラグイン([norcalli/nvim_utils](https://github.com/norcalli/nvim_utils/blob/master/lua/nvim_utils.lua#L554-L567))を使用できます。
 
 ## 構文ハイライトを定義する
 
@@ -960,7 +960,7 @@ syntax APIはまだ作業中です。いくつかのポインターがありま�
 `vim.lsp`は組込みのLSPクライアントを操作するためのモジュールです。
 [neovim/nvim-lspconfig](https://github.com/neovim/nvim-lspconfig/)は有名なLanguage Serverの設定集です。
 
-クライアントの動作は"lsp-handlers"を使用して設定することができます。詳細はこちら:
+クライアントの動作は"lsp-handlers"を使用して設定できます。詳細はこちら:
 - `:help lsp-handler`
 - [neovim/neovim#12655](https://github.com/neovim/neovim/pull/12655)
 - [How to migrate from diagnostic-nvim](https://github.com/nvim-lua/diagnostic-nvim/issues/73#issue-737897078)

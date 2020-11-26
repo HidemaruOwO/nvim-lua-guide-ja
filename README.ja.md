@@ -6,9 +6,9 @@
    * [Luaを書くための既存のチュートリアル](#luaを書くための既存のチュートリアル)
    * [関連するプラグイン](#関連するプラグイン)
 * [Luaファイルを置く場所](#luaファイルを置く場所)
-      * [警告](#警告)
-      * [Tips](#tips)
-      * [パッケージについての注意](#パッケージについての注意)
+    * [警告](#警告)
+    * [Tips](#tips)
+    * [パッケージについての注意](#パッケージについての注意)
 * [Vim scriptからLuaを使用する](#vim-scriptからluaを使用する)
    * [:lua](#lua)
    * [:luado](#luado)
@@ -44,6 +44,10 @@
 * [autocommandを定義する](#autocommandを定義する)
 * [構文ハイライトを定義する](#構文ハイライトを定義する)
 * [一般的なTipsと推奨](#一般的なtipsと推奨)
+  * [リンターと言語サーバーの設定](#リンターと言語サーバーの設定)
+    * [luacheck](#luacheck)
+    * [sumneko/lua-language-server](#sumnekolua-language-server)
+    * [coc.nvim](#cocnvim)
 * [その他](#その他)
    * [vim.loop](#vimloop)
    * [vim.lsp](#vimlsp)
@@ -934,6 +938,61 @@ syntax APIはまだ作業中です。いくつかのポインターがありま�
 - `:help lua-treesitter`
 
 ## 一般的なTipsと推奨
+
+### リンターと言語サーバーの設定
+
+Luaのプロジェクトでリンターや言語サーバーを使用して、診断と自動補完を利用している場合、Neovim固有の設定が必要になる場合があります。人気のあるツールの推奨設定は次のとおりです。:
+
+#### luacheck
+
+次の設定を `~/.luacheckrc` (もしくは `$XDG_CONFIG_HOME/luacheck/.luacheckrc`)に配置すれば、[luacheck](https://github.com/mpeterv/luacheck/)でvimモジュールを認識できます。:
+
+
+```lua
+globals = {
+    "vim",
+}
+```
+
+言語サーバーの[Alloyed/lua-lsp](https://github.com/Alloyed/lua-lsp/)は `luacheck` を使用してリンティングを提供し、同じファイルを読み込みます。
+
+`luacheck` の設定方法の詳細は[ドキュメント](https://luacheck.readthedocs.io/en/stable/config.html)を参照してください。
+
+#### sumneko/lua-language-server
+
+[sumneko/lua-language-server](https://github.com/sumneko/lua-language-server/)の設定例です。(例は組込みのLSPクライアントを使っていますが、他のLSPクライアントでも同じ設定である必要があります）:
+
+```lua
+require'lspconfig'.sumneko_lua.setup {
+    settings = {
+        Lua = {
+            runtime = {
+                -- LuaJITやLua 5.4などのバージョンを設定します。
+                version = 'LuaJIT',
+                -- luaのpathを設定します。
+                path = vim.split(package.path, ';'),
+            },
+            diagnostics = {
+                -- vimモジュールを言語サーバーに認識させます。
+                globals = {'vim'},
+            },
+            workspace = {
+                -- Neovimのランタイムファイルを言語サーバーに認識させます。
+                library = {
+                    [vim.fn.expand('$VIMRUNTIME/lua')] = true,
+                    [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
+                },
+            },
+        },
+    },
+}
+```
+
+[sumneko/lua-language-server](https://github.com/sumneko/lua-language-server/)の設定方法の詳細は["Setting without VSCode"](https://github.com/sumneko/lua-language-server/wiki/Setting-without-VSCode)を見てください。
+
+#### coc.nvim
+
+[coc.nvim](https://github.com/neoclide/coc.nvim/)の補完ソースである[rafcamlet/coc-nvim-lua](https://github.com/rafcamlet/coc-nvim-lua/)はNeovim stdlibの項目を提供しています。
 
 **TODO**:
 - Hot-reloading of modules

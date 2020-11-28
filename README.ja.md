@@ -973,11 +973,11 @@ require'lspconfig'.sumneko_lua.setup {
                 path = vim.split(package.path, ';'),
             },
             diagnostics = {
-                -- vimモジュールを言語サーバーに認識させます。
+                -- vimモジュールを設定します。
                 globals = {'vim'},
             },
             workspace = {
-                -- Neovimのランタイムファイルを言語サーバーに認識させます。
+                -- Neovimのランタイムファイルを設定します。
                 library = {
                     [vim.fn.expand('$VIMRUNTIME/lua')] = true,
                     [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,

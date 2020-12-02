@@ -215,6 +215,15 @@ print(tbl)
 EOF
 ```
 
+Note: 各`:lua`コマンドは独自のスコープを持っており、`local`を付けた変数はコマンドの外からアクセスできません。
+次の例は動作しません。:
+
+```vim
+:lua local foo = 1
+:lua print(foo)
+" '1'ではなく'nil'が出力されます。
+```
+
 参照:
 
 - `:help :lua`

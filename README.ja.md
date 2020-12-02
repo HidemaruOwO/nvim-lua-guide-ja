@@ -623,66 +623,11 @@ vim.wo.number = true -- same as vim.api.nvim_win_set_option(0, 'number', true)
 
 #### 警告
 
-**WARNING**: The following section is based on a few experiments I did. The docs don't seem to mention this behavior and I haven't checked the source code to verify my claims.  
-**TODO**: Can anyone confirm this?
-
-`:set`コマンドしか使ったことがないなら、いくつかのオプションの挙動に驚くかもしれません。
-
-基本的に、オプションはグローバルとローカル(バッファ/ウィンドウ)の片方か両方を持つことができます。
-
-`:setglobal`はグローバルの値を設定します。
-`:setlocal`はローカルの値を設定します。
-`:set`はグローバルとローカルの値を設定します。
-
-`:help :setglobal`から便利な表:
-
-|                 Command | global value | local value |
-| ----------------------: | :----------: | :---------: |
-|       :set option=value |     set      |     set     |
-|  :setlocal option=value |      -       |     set     |
-| :setglobal option=value |     set      |      -      |
-
 Luaでは`:set`相当のものはなく、グローバルかローカルのどちらかを設定します。
-
-`number`はグローバルオプションだと思うかもしれませんが、ドキュメントではウィンドウについてローカルと説明されています。
-そのようなオプションは実際は"sticky"です。: 新しいウィンドウを開いた時に現在のウィンドウからコピーされます。
-
-よって、`init.lua`でオプションを設定するには次のようにします。
-
-```lua
-vim.wo.number = true
-```
-
-`shiftwidth`、`expandtab`、`undofile`などのバッファについてローカルなオプションはもっと紛らわしいです。
-`init.lua`に次のコードが含まれているとします。:
-
-```lua
-vim.bo.expandtab = true
-```
-
-Neovimを起動した直後には問題ありません。: `<Tab>`を押すとタブの変わりにスペースが挿入されます。
-別のバッファを開くと、突然タブに戻ります…。
-
-グローバルに設定すると逆の問題が起こります。:
-
-```lua
-vim.o.expandtab = true
-```
-
-これでは、最初にNeovimを起動した時はタブが挿入されます。別のバッファを開いて`<Tab>`を押すと期待通りになります。
-
-つまり、バッファについてローカルなオプションを正しく動作させるには次のようにします。:
-
-```lua
-vim.bo.expandtab = true
-vim.o.expandtab = true
-```
 
 参照:
 - `:help :setglobal`
 - `:help global-local`
-
-**TODO**: Why does this happen? Do all buffer-local options behave this way? Might be related to [neovim/neovim#7658](https://github.com/neovim/neovim/issues/7658) and [vim/vim#2390](https://github.com/vim/vim/issues/2390). Also for window-local options: [neovim/neovim#11525](https://github.com/neovim/neovim/issues/11525) and [vim/vim#4945](https://github.com/vim/vim/issues/4945)
 
 ## vim内部の変数を管理する
 

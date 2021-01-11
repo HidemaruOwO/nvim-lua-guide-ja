@@ -981,33 +981,7 @@ globals = {
 
 #### sumneko/lua-language-server
 
-[sumneko/lua-language-server](https://github.com/sumneko/lua-language-server/)の設定例です。(例は組込みのLSPクライアントを使っていますが、他のLSPクライアントでも同じ設定である必要があります）:
-
-```lua
-require'lspconfig'.sumneko_lua.setup {
-    settings = {
-        Lua = {
-            runtime = {
-                -- LuaJITやLua 5.4などのバージョンを設定します。
-                version = 'LuaJIT',
-                -- luaのpathを設定します。
-                path = vim.split(package.path, ';'),
-            },
-            diagnostics = {
-                -- vimモジュールを設定します。
-                globals = {'vim'},
-            },
-            workspace = {
-                -- Neovimのランタイムファイルを設定します。
-                library = {
-                    [vim.fn.expand('$VIMRUNTIME/lua')] = true,
-                    [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
-                },
-            },
-        },
-    },
-}
-```
+[nvim-lspconfig](https://github.com/neovim/nvim-lspconfig/)リポジトリに[sumneko/lua-language-serverの設定方法](https://github.com/neovim/nvim-lspconfig/blob/master/CONFIG.md#sumneko_lua)があります（例は組込みのLSPクライアントを使っていますが、他のLSPクライアントでも同じ設定である必要があります）。
 
 [sumneko/lua-language-server](https://github.com/sumneko/lua-language-server/)の設定方法の詳細は["Setting without VSCode"](https://github.com/sumneko/lua-language-server/wiki/Setting-without-VSCode)を見てください。
 

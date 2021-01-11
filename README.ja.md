@@ -357,7 +357,7 @@ echo luaeval('string.format("Lua is %s", _A)', 'awesome')
 
 ### v:lua
 
-Vimのグローバル変数です。Vim scriptからLuaのグローバル関数を直接呼ぶことができます。
+Vimのグローバル変数です。Vim scriptからLuaのグローバル名前空間内の関数を直接呼ぶことができます。
 この場合でも、Vim scriptの型はLuaの型に変換されます。逆も同様です。
 
 ```vim

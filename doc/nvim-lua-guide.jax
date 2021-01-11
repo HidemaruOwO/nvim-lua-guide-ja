@@ -344,7 +344,7 @@ scriptの型に変換されます。(その逆も同様です。)
 v:lua~
 
 Vimのグローバル変数です。Vim
-scriptからLuaのグローバル関数を直接呼ぶことができます。
+scriptからLuaのグローバル名前空間内の関数を直接呼ぶことができます。 `_G`: https://www.lua.org/manual/5.1/manual.html#pdf-_G
 この場合でも、Vim
 scriptの型はLuaの型に変換されます。逆も同様です。
 

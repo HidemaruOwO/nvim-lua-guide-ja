@@ -21,7 +21,7 @@
       * [警告](#警告-1)
    * [Tips](#tips-1)
 * [vim名前空間](#vim名前空間)
-      * [Tips](#tips-2)
+   * [Tips](#tips-2)
 * [LuaからVim scriptを使用する](#luaからvim-scriptを使用する)
    * [vim.api.nvim_eval()](#vimapinvim_eval)
       * [警告](#警告-2)

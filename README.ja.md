@@ -28,6 +28,7 @@
    * [vim.api.nvim_exec()](#vimapinvim_exec)
    * [vim.api.nvim_command()](#vimapinvim_command)
       * [Tips](#tips-3)
+   * [vim.api.nvim_replace_termcodes()](#vimapinvim_replace_termcodes)
 * [vimオプションを管理する](#vimオプションを管理する)
    * [API関数を使用する](#api関数を使用する)
    * [メタアクセサーを使用する](#メタアクセサーを使用する)
@@ -543,6 +544,64 @@ vim.cmd('%s/\\Vfoo/bar/g')
 ```lua
 vim.cmd([[%s/\Vfoo/bar/g]])
 ```
+
+### vim.api.nvim_replace_termcodes()
+
+このAPI関数はターミナルコードとVimのキーコードをエスケープできます。
+
+次のようなマッピングを見たことがあるかもしれません:
+
+```vim
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+```
+
+同じことをLuaでやると大変です。次のようにやるかもしれません:
+
+```lua
+function _G.smart_tab()
+    return vim.fn.pumvisible() == 1 and [[\<C-n>]] or [[\<Tab>]]
+end
+vim.api.nvim_set_keymap('i', '<Tab>', 'v:lua.smart_tab()', {expr = true, noremap = true})
+```
+
+マッピングに `\<Tab>` と `\<C-n>` が挿入されているのを知るためだけに...
+
+キーコードをエスケープできるのは、Vimscriptの機能です。`\r`, `\42` や `\x10` のような多くのプログラミング言語に共通する通常のエスケープシーケンスとは別に、Vimsriptの `expr-quotes` (二重引用符で囲まれる文字列)を使用すると、人間が読める表現のVimキーコードをエスケープします。
+
+Luaにはそのような機能は組み込まれていません。嬉しいことに、ターミナルコードとキーコードをエスケープするNeovimのAPI関数が `nvim_replace_termcodes()` です:
+
+```lua
+print(vim.api.nvim_replace_termcodes('<Tab>', true, true, true))
+```
+
+これは少し冗長です。再利用できるラッパーを作ると便利です:
+
+```lua
+-- `termcodes` 専用の `t` 関数です
+-- この関数を呼ばなくてもいいですが、この簡潔さが便利です
+local function t(str)
+    -- 必要に応じてboolean引数で調整します
+    return vim.api.nvim_replace_termcodes(str, true, true, true)
+end
+print(t'<Tab>')
+```
+
+先程の例はこれで期待通りに動きます:
+
+```lua
+local function t(str)
+    return vim.api.nvim_replace_termcodes(str, true, true, true)
+end
+function _G.smart_tab()
+    return vim.fn.pumvisible() == 1 and t'<C-n>' or t'<Tab>'
+end
+vim.api.nvim_set_keymap('i', '<Tab>', 'v:lua.smart_tab()', {expr = true, noremap = true})
+```
+
+参照:
+- `:help keycodes`
+- `:help expr-quote`
+- `:help nvim_replace_termcodes()`
 
 ## vimオプションを管理する
 

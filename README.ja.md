@@ -900,10 +900,10 @@ Neovimはマッピングを設定、取得、削除するためのAPI関数を�
 バッファローカルなマッピングは、バッファ番号を引数の最初に受け取ります(`0`を指定した場合、カレントバッファです)。
 
 ```lua
-vim.api.nvim_set_keymap('n', '<leader><Space>', ':set hlsearch!<CR>', { noremap = true, silent = true })
--- :nnoremap <silent> <leader><Space> :set hlsearch<CR>
-vim.api.nvim_set_keymap('n', '<leader>tegf',  [[<Cmd>lua require('telescope.builtin').git_files()<CR>]], { noremap = true, silent = true })
--- :nnoremap <silent> <leader>tegf <Cmd>lua require('telescope.builtin').git_files()<CR>
+vim.api.nvim_set_keymap('n', '<Leader><Space>', ':set hlsearch!<CR>', { noremap = true, silent = true })
+-- :nnoremap <silent> <Leader><Space> :set hlsearch<CR>
+vim.api.nvim_set_keymap('n', '<Leader>tegf',  [[<Cmd>lua require('telescope.builtin').git_files()<CR>]], { noremap = true, silent = true })
+-- :nnoremap <silent> <Leader>tegf <Cmd>lua require('telescope.builtin').git_files()<CR>
 
 vim.api.nvim_buf_set_keymap(0, '', 'cc', 'line(".") == 1 ? "cc" : "ggcc"', { noremap = true, expr = true })
 -- :noremap <buffer> <expr> cc line('.') == 1 ? 'cc' : 'ggcc'
@@ -927,8 +927,8 @@ print(vim.inspect(vim.api.nvim_buf_get_keymap(0, 'i')))
 `vim.api.nvim_del_keymap()`は、モードと左側のマッピングを受け取ります。
 
 ```lua
-vim.api.nvim_del_keymap('n', '<leader><Space>')
--- :nunmap <leader><Space>
+vim.api.nvim_del_keymap('n', '<Leader><Space>')
+-- :nunmap <Leader><Space>
 ```
 
 この場合でも、`vim.api.nvim_buf_del_keymap()`は最初の引数にバッファ番号を受け取ります。`0`を指定した場合、カレントバッファです。

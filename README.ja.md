@@ -10,7 +10,6 @@
   * [その他のLuaファイル](#その他のLuaファイル)
     * [警告](#警告)
     * [Tips](#tips)
-    * [パッケージについての注意](#パッケージについての注意)
 * [Vim scriptからLuaを使用する](#vim-scriptからluaを使用する)
    * [:lua](#lua)
    * [:luado](#luado)
@@ -171,34 +170,6 @@ require('other_modules') -- other_modules/init.luaをロード
 異なる2つのプラグインに`lua/main.lua`がある場合、`require('main')`は曖昧です。: どのファイルを読み込みますか？
 
 トップレベルのフォルダで名前空間をつけることをお勧めします。: `lua/plugin_name/main.lua`
-
-#### パッケージについての注意
-
-**UPDATE**: 最新のnightlyビルドを使用している場合、[問題](https://github.com/neovim/neovim/pull/13119)は解決しているので、このセクションを安全に飛ばすことができます。
-
-`packages`機能やそれをベースとしたパッケージマネージャ([packer.nvim](https://github.com/wbthomason/packer.nvim), [minpac](https://github.com/k-takata/minpac),  [vim-packager](https://github.com/kristijanhusak/vim-packager/)等)を使用している場合、Luaプラグインを使用する際に注意することがあります。
-
-`start`フォルダ内のパッケージは`init.vim`の後に読み込まれます。これは、Neovimの処理が終わるまで`runtimepath`にパッケージが追加されないことを意味します。
-プラグインがLuaモジュールを`require`するかautoload関数を呼ぶことを期待している場合に問題を起す可能性があります。
-
-`start/foo`に`lua/bar.lua`があるとします。`init.vim`から下記を行うと`runtimepath`がまだ更新されていないためエラーになります。:
-
-```vim
-lua require('bar')
-```
-
-モジュールを`require`する前に`packadd! foo`を行う必要があります。
-
-```vim
-packadd! foo
-lua require('bar')
-```
-
-`packadd`に`!`を付けると、`plugin`または`ftdetect`のスクリプトが読みこまれず、`runtimepath`にパッケージが追加されます。
-
-参照:
-- `:help :packadd`
-- [Issue #11409](https://github.com/neovim/neovim/issues/11409)
 
 ## Vim scriptからLuaを使用する
 

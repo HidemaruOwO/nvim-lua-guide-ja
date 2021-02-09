@@ -662,6 +662,8 @@ print(vim.api.nvim_buf_get_option(10, 'shiftwidth')) -- 4
 ```lua
 vim.o.smarttab = false
 print(vim.o.smarttab) -- false
+vim.o.isfname = vim.o.isfname .. ',@-@' -- on Linux: set isfname+=@-@
+print(vim.o.listchars) -- '@,48-57,/,.,-,_,+,,,#,$,%,~,=,@-@'
 
 vim.bo.shiftwidth = 4
 print(vim.bo.shiftwidth) -- 4
@@ -900,6 +902,8 @@ Neovimはマッピングを設定、取得、削除するためのAPI関数を�
 ```lua
 vim.api.nvim_set_keymap('n', '<leader><Space>', ':set hlsearch!<CR>', { noremap = true, silent = true })
 -- :nnoremap <silent> <leader><Space> :set hlsearch<CR>
+vim.api.nvim_set_keymap('n', '<leader>tegf',  [[<Cmd>lua require('telescope.builtin').git_files()<CR>]], { noremap = true, silent = true })
+-- :nnoremap <silent> <leader>tegf <Cmd>lua require('telescope.builtin').git_files()<CR>
 
 vim.api.nvim_buf_set_keymap(0, '', 'cc', 'line(".") == 1 ? "cc" : "ggcc"', { noremap = true, expr = true })
 -- :noremap <buffer> <expr> cc line('.') == 1 ? 'cc' : 'ggcc'

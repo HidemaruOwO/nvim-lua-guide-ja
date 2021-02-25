@@ -691,6 +691,7 @@ vim.api.nvim_buf_del_var(3, 'some_tabpage_variable')
 - `vim.w.{name}`: ウィンドウ変数
 - `vim.t.{name}`: タブ変数
 - `vim.v.{name}`: Vimの定義済み変数
+- `vim.env.{name}`: 環境変数
 
 ```lua
 vim.g.some_global_variable = {

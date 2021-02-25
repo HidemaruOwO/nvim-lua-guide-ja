@@ -24,6 +24,9 @@ resources to get started:
 - The  Learn X in Y minutes page about Lua:
 https://learnxinyminutes.com/docs/lua/  should give you a quick overview
 of the basics
+-  This guide:
+https://github.com/medwatt/Notes/blob/main/Lua/Lua_Quick_Guide.ipynb
+is also a good resource for getting started quickly
 - If videos are more to your liking, Derek Banas has a  1-hour tutorial
 on the language: https://www.youtube.com/watch?v=iMacxZQMPXs
 - The  lua-users wiki: http://lua-users.org/wiki/LuaDirectory  is full
@@ -36,7 +39,7 @@ is easy to learn, especially if you have experience with similar scripting
 languages like JavaScript. You may already know more Lua than you realise!
 
 Note: the version of Lua that Neovim embeds is LuaJIT 2.1.0, which
-maintains compatibility with Lua 5.1 (with a few 5.2 extensions)
+maintains compatibility with Lua 5.1 (with a few 5.2 extensions).
 
 Existing tutorials for writing Lua in Neovim~
 
@@ -52,6 +55,8 @@ https://www.2n.pl/blog/how-to-write-neovim-plugins-in-lua.md
 https://www.2n.pl/blog/how-to-make-ui-for-neovim-plugins-in-lua
 -  ms-jpq - Neovim Async Tutorial:
 https://ms-jpq.github.io/neovim-async-tutorial/
+-  oroques.dev - Neovim 0.5 features and the switch to init.lua:
+https://oroques.dev/notes/neovim-init/
 
 Companion plugins~
 
@@ -153,47 +158,6 @@ If two different plugins have a `lua/main.lua` file, then doing
 
 It might be a good idea to namespace your config or your plugin with a
 top-level folder, like so: `lua/plugin_name/main.lua`
-
-A note about packages~
-
-**UPDATE**: if you're using the latest nightly build, this is  no longer
-an issue: https://github.com/neovim/neovim/pull/13119  and you can safely
-skip this section.
-
-If you're a user of the `packages` feature or a plugin manager based on
-it  such as  packer.nvim: https://github.com/wbthomason/packer.nvim
-,  minpac: https://github.com/k-takata/minpac  or  vim-packager:
-https://github.com/kristijanhusak/vim-packager/  , there are things to
-be aware of when using Lua plugins.
-
-Packages in the `start` folder are only loaded after sourcing your
-`init.vim`. This means that a package isn't added to the `runtimepath`
-until after Neovim has finished processing the file. This can cause
-issues if a plugin expects you to `require` a Lua module or call an
-autoloaded function.
-
-Assuming a package `start/foo` has a `lua/bar.lua` file, doing this
-from your `init.vim` will throw an error because the `runtimepath`
-hasn't yet been updated:
-
-    >
-    lua require('bar')
-<
-
-You have to use the `packadd! foo` command before `require`ing the module.
-
-    >
-    packadd! foo
-    lua require('bar')
-<
-
-Appending `!` to `packadd` means Neovim will put the package in the
-`runtimepath` without sourcing any scripts in its `plugin` or `ftdetect`
-directory.
-
-See also:
-- |:packadd|
--  Issue #11409: https://github.com/neovim/neovim/issues/11409
 
 ==============================================================================
 USING LUA FROM VIMSCRIPT
@@ -376,9 +340,10 @@ See also:
 
 v:lua~
 
-This global Vim variable allows you to call global Lua functions directly
-from Vimscript. Again, Vim data types are converted to Lua types and
-vice versa.
+This global Vim variable allows you to call Lua functions in the global
+namespace   `_G`: https://www.lua.org/manual/5.1/manual.html#pdf-_G
+directly from Vimscript. Again, Vim data types are converted to Lua
+types and vice versa.
 
     >
     call v:lua.print('Hello from Lua!')
@@ -411,18 +376,15 @@ vice versa.
     " Also works in expression mappings
     lua << EOF
     function _G.check_back_space()
-        local col = vim.fn.col('.') - 1
-        if col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') then
-            return true
-        else
-            return false
-        end
+        local col = vim.api.nvim_win_get_cursor(0)[2]
+        return (col == 0 or vim.api.nvim_get_current_line():sub(col,
+        col):match('%s')) and true
     end
     EOF
 
     inoremap <silent> <expr> <Tab>
-        \ pumvisible() ? '\<C-n>' :
-        \ v:lua.check_back_space() ? '\<Tab>' :
+        \ pumvisible() ? "\<C-n>" :
+        \ v:lua.check_back_space() ? "\<Tab>" :
         \ completion#trigger_completion()
 <
 
@@ -599,6 +561,79 @@ characters:
     vim.cmd([[%s/\Vfoo/bar/g]])
 <
 
+vim.api.nvim_replace_termcodes()~
+
+This API function allows you to escape terminal codes and Vim keycodes.
+
+You may have come across mappings like this one:
+
+    >
+    inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+<
+
+Trying to do the same in Lua can prove to be a challenge. You might be
+tempted to do it like this:
+
+    >
+    function _G.smart_tab()
+	return vim.fn.pumvisible() == 1 and [[\<C-n>]] or [[\<Tab>]]
+    end
+
+    vim.api.nvim_set_keymap('i', '<Tab>', 'v:lua.smart_tab()', {expr =
+    true, noremap = true})
+<
+
+only to find out that the mapping inserts `\<Tab>` and `\<C-n>`
+literally...
+
+Being able to escape keycodes is actually a Vimscript feature. Aside
+from the usual escape sequences like `\r`, `\42` or `\x10` that are
+common to many programming languages, Vimscript `expr-quotes` (strings
+surrounded with double quotes) allow you to escape the human-readable
+representation of Vim keycodes.
+
+Lua doesn't have such a feature built-in. Fortunately, Neovim
+has an API function for escaping terminal codes and keycodes:
+`nvim_replace_termcodes()`
+
+    >
+    print(vim.api.nvim_replace_termcodes('<Tab>', true, true, true))
+<
+
+This is a little verbose. Making a reusable wrapper can help:
+
+    >
+    -- The function is called `t` for `termcodes`.
+    -- You don't have to call it that, but I find the terseness convenient
+    local function t(str)
+	-- Adjust boolean arguments as needed
+	return vim.api.nvim_replace_termcodes(str, true, true, true)
+    end
+
+    print(t'<Tab>')
+<
+
+Coming back to our earlier example, this should now work as expected:
+
+    >
+    local function t(str)
+	return vim.api.nvim_replace_termcodes(str, true, true, true)
+    end
+
+    function _G.smart_tab()
+	return vim.fn.pumvisible() == 1 and t'<C-n>' or t'<Tab>'
+    end
+
+    vim.api.nvim_set_keymap('i', '<Tab>', 'v:lua.smart_tab()', {expr =
+    true, noremap = true})
+<
+
+See also:
+
+- |keycodes|
+- |expr-quote|
+- |nvim_replace_termcodes()|
+
 ==============================================================================
 MANAGING VIM OPTIONS
                                                  *luaguide-managing-vim-options*
@@ -667,6 +702,8 @@ you to manipulate options as if they were variables:
     >
     vim.o.smarttab = false
     print(vim.o.smarttab) -- false
+    vim.o.isfname = vim.o.isfname .. ',@-@' -- on Linux: set isfname+=@-@
+    print(vim.o.listchars) -- '@,48-57,/,.,-,_,+,,,#,$,%,~,=,@-@'
 
     vim.bo.shiftwidth = 4
     print(vim.bo.shiftwidth) -- 4
@@ -683,7 +720,7 @@ no number is given, the current buffer/window is used:
 <
 
 See also:
-- |lua-vim-internal-options|
+- |lua-vim-options|
 
 Caveats~
 
@@ -766,6 +803,7 @@ meta-accessors:
 - `vim.w.{name}`: window variables
 - `vim.t.{name}`: tabpage variables
 - `vim.v.{name}`: predefined Vim variables
+- `vim.env.{name}`: environment variables
 
     >
     vim.g.some_global_variable = {
@@ -782,6 +820,9 @@ To delete one of these variables, simply assign `nil` to it:
     >
     vim.g.some_global_variable = nil
 <
+
+See also:
+- |lua-vim-variables|
 
 Caveats~
 
@@ -807,37 +848,11 @@ This is a known issue:
 CALLING VIMSCRIPT FUNCTIONS
                                           *luaguide-calling-vimscript-functions*
 
-vim.call()~
-
-`vim.call()` calls a Vimscript function. This can either be a built-in
-Vim function or a user function. Again, data types are converted back
-and forth from Lua to Vimscript.
-
-It takes in the name of the function followed by the arguments you want
-to pass to that function:
-
-    >
-    print(vim.call('printf', 'Hello from %s', 'Lua'))
-
-    local reversed_list = vim.call('reverse', { 'a', 'b', 'c' })
-    print(vim.inspect(reversed_list)) -- { "c", "b", "a" }
-
-    local function print_stdout(chan_id, data, name)
-	print(data[1])
-    end
-
-    vim.call('jobstart', 'ls', { on_stdout = print_stdout })
-
-    vim.call('my#autoload#function')
-<
-
-See also:
-- |vim.call()|
-
 vim.fn.{function}()~
 
-`vim.fn` does the exact same thing as `vim.call()`, but looks more like
-a native Lua function call:
+`vim.fn` is for calling a Vimscript function.
+The Vimscript function can either be a built-in Vim function or a user
+function. Data types are converted back and forth from Lua to Vimscript.
 
     >
     print(vim.fn.printf('Hello from %s', 'Lua'))
@@ -852,12 +867,16 @@ a native Lua function call:
     vim.fn.jobstart('ls', { on_stdout = print_stdout })
 <
 
-Hashes `#` aren't valid characters for indentifiers in Lua, so autoload
-functions have to be called with this syntax:
+Strings with invalid Lua names can be used with `vim.fn[variable]`.
+For example, hashes (`#`) are not valid characters for indentifiers in
+Lua, so autoload functions have to be called with this syntax:
 
     >
     vim.fn['my#autoload#function']()
 <
+
+The functionality of `vim.fn` is identical to `vim.call`, but allows a
+more Lua-like syntax.
 
 See also:
 - |vim.fn|
@@ -867,6 +886,10 @@ Tips~
 Neovim has an extensive library of powerful built-in functions that are
 very useful for plugins. See `:help vim-function` for an alphabetical
 list and `:help function-list` for a list of functions grouped by topic.
+
+Neovim API functions should be used directly through
+`vim.api.{..}`. For example, use `vim.api.nvim_list_uis()` instead of
+`vim.fn.nvim_list_uis`. See `:help api` for information.
 
 Caveats~
 
@@ -940,9 +963,14 @@ Buffer-local mappings also take a buffer number as their first argument
 (`0` sets the mapping for the current buffer).
 
     >
-    vim.api.nvim_set_keymap('n', '<leader><Space>', ':set hlsearch!<CR>',
+    vim.api.nvim_set_keymap('n', '<Leader><Space>', ':set hlsearch!<CR>',
     { noremap = true, silent = true })
-    -- :nnoremap <silent> <leader><Space> :set hlsearch<CR>
+    -- :nnoremap <silent> <Leader><Space> :set hlsearch<CR>
+    vim.api.nvim_set_keymap('n', '<Leader>tegf',  [[<Cmd>lua
+    require('telescope.builtin').git_files()<CR>]], { noremap = true,
+    silent = true })
+    -- :nnoremap <silent> <Leader>tegf <Cmd>lua
+    require('telescope.builtin').git_files()<CR>
 
     vim.api.nvim_buf_set_keymap(0, '', 'cc', 'line(".") == 1 ? "cc" :
     "ggcc"', { noremap = true, expr = true })
@@ -970,8 +998,8 @@ its first argument (`0` will get mapppings for the current bufffer)
 a mapping.
 
     >
-    vim.api.nvim_del_keymap('n', '<leader><Space>')
-    -- :nunmap <leader><Space>
+    vim.api.nvim_del_keymap('n', '<Leader><Space>')
+    -- :nunmap <Leader><Space>
 <
 
 Again, `vim.api.nvim_buf_del_keymap()`, takes a buffer number as its
@@ -1048,38 +1076,11 @@ its  documentation: https://luacheck.readthedocs.io/en/stable/config.html
 
 sumneko/lua-language-server~
 
-Example configuration for  sumneko/lua-language-server:
-https://github.com/sumneko/lua-language-server/   the example uses the
-built-in LSP client but the configuration should be identical for other
-LSP client implementations :
-
-    >
-    require'lspconfig'.sumneko_lua.setup {
-	settings = {
-	    Lua = {
-		runtime = {
-		    -- Get the language server to recognize LuaJIT
-		    globals like `jit` and `bit`
-		    version = 'LuaJIT',
-		    -- Setup your lua path
-		    path = vim.split(package.path, ';'),
-		},
-		diagnostics = {
-		    -- Get the language server to recognize the `vim`
-		    global
-		    globals = {'vim'},
-		},
-		workspace = {
-		    -- Make the server aware of Neovim runtime files
-		    library = {
-			[vim.fn.expand('$VIMRUNTIME/lua')] = true,
-			[vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
-		    },
-		},
-	    },
-	},
-    }
-<
+The  nvim-lspconfig: https://github.com/neovim/nvim-lspconfig/	repository
+contains  instructions to configure sumneko/lua-language-server:
+https://github.com/neovim/nvim-lspconfig/blob/master/CONFIG.md#sumneko_lua
+the example uses the built-in LSP client but the configuration should
+be identical for other LSP client implementations .
 
 For more information on how to configure  sumneko/lua-language-server:
 https://github.com/sumneko/lua-language-server/
@@ -1091,16 +1092,6 @@ coc.nvim~
 The  rafcamlet/coc-nvim-lua: https://github.com/rafcamlet/coc-nvim-lua/
 completion source for  coc.nvim: https://github.com/neoclide/coc.nvim/
 provides completion items for the Neovim stdlib.
-
-	*Todo	tasks:
-- Hot-reloading of modules
-- `vim.validate()`?
-- Add stuff about unit tests? I know Neovim uses the  busted:
-https://olivinelabs.com/busted/  framework, but I don't know how to use
-it for plugins
-- Best practices? I'm not a Lua wizard so I wouldn't know
-- How to use LuaRocks packages	 wbthomason/packer.nvim:
-https://github.com/wbthomason/packer.nvim ?
 
 ==============================================================================
 MISCELLANEOUS

@@ -631,7 +631,7 @@ boolな(`(no)number`のような)オプションは`true`か`false`のどちら�
 <
 
 参照:
-- |lua-vim-internal-options|
+- |lua-vim-options|
 
 警告~
 

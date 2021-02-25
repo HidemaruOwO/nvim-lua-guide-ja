@@ -621,7 +621,7 @@ vim.wo.number = true -- same as vim.api.nvim_win_set_option(0, 'number', true)
 ```
 
 参照:
-- `:help lua-vim-internal-options`
+- `:help lua-vim-options`
 
 #### 警告
 

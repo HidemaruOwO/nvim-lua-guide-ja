@@ -330,7 +330,7 @@ echo luaeval('string.format("Lua is %s", _A)', 'awesome')
 
 ### v:lua
 
-Vimのグローバル変数です。Vim scriptからLuaのグローバル名前空間内の関数を直接呼ぶことができます。
+Vimのグローバル変数です。Vim scriptからLuaのグローバル名前空間([`_G`](https://www.lua.org/manual/5.1/manual.html#pdf-_G)) 内の関数を直接呼ぶことができます。
 この場合でも、Vim scriptの型はLuaの型に変換されます。逆も同様です。
 
 ```vim
@@ -520,40 +520,42 @@ vim.cmd([[%s/\Vfoo/bar/g]])
 
 このAPI関数はターミナルコードとVimのキーコードをエスケープできます。
 
-次のようなマッピングを見たことがあるかもしれません:
+次のようなマッピングを見たことがあるかもしれません。:
 
 ```vim
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 ```
 
-同じことをLuaでやると大変です。次のようにやるかもしれません:
+同じことをLuaでやると大変です。次のようにやるかもしれません。:
 
 ```lua
 function _G.smart_tab()
     return vim.fn.pumvisible() == 1 and [[\<C-n>]] or [[\<Tab>]]
 end
+
 vim.api.nvim_set_keymap('i', '<Tab>', 'v:lua.smart_tab()', {expr = true, noremap = true})
 ```
 
 マッピングに `\<Tab>` と `\<C-n>` が挿入されているのを知るためだけに...
 
-キーコードをエスケープできるのは、Vimscriptの機能です。`\r`, `\42` や `\x10` のような多くのプログラミング言語に共通する通常のエスケープシーケンスとは別に、Vimsriptの `expr-quotes` (二重引用符で囲まれる文字列)を使用すると、人間が読める表現のVimキーコードをエスケープします。
+キーコードをエスケープできるのは、Vim scriptの機能です。`\r`, `\42` や `\x10` のような多くのプログラミング言語に共通する通常のエスケープシーケンスとは別に、Vim scriptの `expr-quotes` (ダブルクォートで囲まれる文字列)を使用すると、人間が読める表現のVimキーコードをエスケープします。
 
-Luaにはそのような機能は組み込まれていません。嬉しいことに、ターミナルコードとキーコードをエスケープするNeovimのAPI関数が `nvim_replace_termcodes()` です:
+Luaにはそのような機能は組み込まれていません。嬉しいことに、NeovimにはターミナルコードとキーコードをエスケープするAPI関数 `nvim_replace_termcodes()` があります。:
 
 ```lua
 print(vim.api.nvim_replace_termcodes('<Tab>', true, true, true))
 ```
 
-これは少し冗長です。再利用できるラッパーを作ると便利です:
+これは少し冗長です。再利用できるラッパーを作ると便利です。:
 
 ```lua
 -- `termcodes` 専用の `t` 関数です
--- この関数を呼ばなくてもいいですが、この簡潔さが便利です
+-- この名前で呼ばなくてもいいですが、この簡潔さが便利です
 local function t(str)
     -- 必要に応じてboolean引数で調整します
     return vim.api.nvim_replace_termcodes(str, true, true, true)
 end
+
 print(t'<Tab>')
 ```
 
@@ -563,9 +565,11 @@ print(t'<Tab>')
 local function t(str)
     return vim.api.nvim_replace_termcodes(str, true, true, true)
 end
+
 function _G.smart_tab()
     return vim.fn.pumvisible() == 1 and t'<C-n>' or t'<Tab>'
 end
+
 vim.api.nvim_set_keymap('i', '<Tab>', 'v:lua.smart_tab()', {expr = true, noremap = true})
 ```
 

@@ -4,7 +4,8 @@
 はじめに
                                                          *luaguide-introduction*
 
-Neovimのファーストクラス言語としてのLuaはキラー機能の1つになりつつあります。しかし、Luaでプラグインを書くための教材はVim
+Neovimのファーストクラス言語としてのLuaはキラー機能の1つになりつつあります。
+しかし、Luaでプラグインを書くための教材はVim
 script程多くありません。これは、Luaを始めるための基本的な情報を提供する試みです。
 
 このガイドは最新の nightly build:
@@ -16,9 +17,11 @@ Luaを学ぶ~
 
 まだLuaについて詳しくない場合、学ぶためのリソースはたくさんあります。:
 
--  Learn X in Y minutes page about Lua:
+- Learn X in Y minutes page about Lua:
 https://learnxinyminutes.com/docs/lua/
 は基本的な概要を説明します。
+- このガイド https://github.com/medwatt/Notes/blob/main/Lua/Lua_Quick_Guide.ipynb
+も素早く始めるのに良いチュートリアルです。
 - 動画が好きなら、Derek Banasの動画があります。 1-hour
 tutorial on the language: https://www.youtube.com/watch?v=iMacxZQMPXs
 -  lua-users wiki: http://lua-users.org/wiki/LuaDirectory
@@ -26,14 +29,17 @@ tutorial on the language: https://www.youtube.com/watch?v=iMacxZQMPXs
 -  official reference manual for Lua: https://www.lua.org/manual/5.1/
 には最も包括的な情報があります。
 
-Luaはとてもクリーンでシンプルな言語であることに注意してください。JavaScriptのようなスクリプト言語の経験があれば、学ぶことは簡単です。あなたはもう自分で思っているよりLuaについて知っているかもしれません！
+Luaはとてもクリーンでシンプルな言語であることに注意してください。
+JavaScriptのようなスクリプト言語の経験があれば、学ぶことは簡単です。
+あなたはもう自分で思っているよりLuaについて知っているかもしれません！
 
 Note: Neovimに埋め込まれているLuaはLuaJIT 2.1.0でLua
 5.1(と、いくつかの5.2拡張)と互換性を維持しています。
 
 Luaを書くための既存のチュートリアル~
 
-Luaでプラグインを書くためのチュートリアルが既にいくつかあります。それらはこのガイドを書くのに役に立ちました。筆者に感謝します。
+Luaでプラグインを書くためのチュートリアルが既にいくつかあります。
+それらはこのガイドを書くのに役に立ちました。筆者に感謝します。
 
 -  teukka.tech - init.vimからinit.luaへ:
 https://teukka.tech/luanvim.html
@@ -76,7 +82,8 @@ Neovimは、`init.vim`の代わりに設定ファイルとして`init.lua`を読
 
 その他のLuaファイル~
 
-Luaファイルは通常、`runtimepath`内の`lua/`フォルダにあります(ほとんどの場合、\*nixでは`~/.config/nvim/lua`、Windowsでは`~/AppData/Local/nvim/lua`を意味します)。
+Luaファイルは通常、`runtimepath`内の`lua/`フォルダにあります(ほとんどの場合、
+\*nixでは`~/.config/nvim/lua`、Windowsでは`~/AppData/Local/nvim/lua`を意味します)。
 これらのファイルをLuaモジュールとして`require()`できます。
 
 例として次のフォルダ構造を取り上げましょう。:
@@ -133,7 +140,8 @@ Luaファイルは通常、`runtimepath`内の`lua/`フォルダにあります(
 
 Tips~
 
-いくつかのLuaプラグインは`lua/`フォルダ内に同じ名前のファイルがあるかもしれません。これにより、名前空間の衝突を起こす可能性があります。
+いくつかのLuaプラグインは`lua/`フォルダ内に同じ名前のファイルがあるかもしれません。
+これにより、名前空間の衝突を起こす可能性があります。
 
 異なる2つのプラグインに`lua/main.lua`がある場合、`require('main')`は曖昧です。:
 どのファイルを読み込みますか？
@@ -141,6 +149,48 @@ Tips~
 トップレベルのフォルダで名前空間をつけることをお勧めします。:
 `lua/plugin_name/main.lua`
 
+<<<<<<< Updated upstream
+=======
+パッケージについての注意~
+
+**UPDATE**: 最新のnightlyビルドを使用している場合、
+問題: https://github.com/neovim/neovim/pull/13119
+は解決しているので、このセクションを安全に飛ばすことができます。
+
+`packages`機能やそれをベースとしたパッケージマネージャ
+packer.nvim: https://github.com/wbthomason/packer.nvim ,
+minpac: https://github.com/k-takata/minpac ,   vim-packager:
+https://github.com/kristijanhusak/vim-packager/ 等
+を使用している場合、Luaプラグインを使用する際に注意することがあります。
+
+`start`フォルダ内のパッケージは`init.vim`の後に読み込まれます。これは、Neovimの
+処理が終わるまで`runtimepath`にパッケージが追加されないことを意味します。
+プラグインがLuaモジュールを`require`するかautoload関数を呼ぶことを期待している
+場合に問題を起す可能性があります。
+
+`start/foo`に`lua/bar.lua`があるとします。`init.vim`から下記を行うと`runtimepath`
+がまだ更新されていないためエラーになります。:
+
+    >
+    lua require('bar')
+<
+
+モジュールを`require`する前に`packadd!
+foo`を行う必要があります。
+
+    >
+    packadd! foo
+    lua require('bar')
+<
+
+`packadd`に`!`を付けると、`plugin`または`ftdetect`のスクリプトが読みこまれず、
+`runtimepath`にパッケージが追加されます。
+
+参照:
+- |:packadd|
+-  Issue #11409: https://github.com/neovim/neovim/issues/11409
+
+>>>>>>> Stashed changes
 ==============================================================================
 Vim scriptからLuaを使用する
                                              *luaguide-using-lua-from-vimscript*
@@ -231,7 +281,9 @@ luafile vs require():~
 - `require()`:
     - Luaの組込み関数です。Luaのモジュールを読み込むのに使用します。
     - `runtimepath`内にある`lua`フォルダからモジュールを探します。
-    - どのモジュールをロードしたかを記憶し、多重に実行されるのを防ぎます。Neovim実行中に、モジュールに含まれるコードを変更し、もう一度`require()`を実行してもモジュールは更新されません。
+    - どのモジュールをロードしたかを記憶し、多重に実行されるのを防ぎます。
+      Neovim実行中に、モジュールに含まれるコードを変更し、もう一度`require()`を
+      実行してもモジュールは更新されません。
 - `:luafile`:
     - Exコマンドです。モジュールには対応していません。
     - カレンドウィンドウのカレントディレクトリに対する絶対パスか相対パスを指定します。
@@ -311,9 +363,9 @@ scriptの型に変換されます。(その逆も同様です。)
 v:lua~
 
 Vimのグローバル変数です。Vim
-scriptからLuaのグローバル名前空間内の関数を直接呼ぶことができます。 `_G`: https://www.lua.org/manual/5.1/manual.html#pdf-_G
-この場合でも、Vim
-scriptの型はLuaの型に変換されます。逆も同様です。
+scriptからLuaのグローバル名前空間(`_G`: https://www.lua.org/manual/5.1/manual.html#pdf-_G
+)内の関数を直接呼ぶことができます。
+この場合でも、Vim scriptの型はLuaの型に変換されます。逆も同様です。
 
     >
     call v:lua.print('Hello from Lua!')
@@ -522,59 +574,63 @@ vim.api.nvim_replace_termcodes()~
 
 このAPI関数はターミナルコードとVimのキーコードをエスケープできます。
 
-次のようなマッピングを見たことがあるかもしれません:
+次のようなマッピングを見たことがあるかもしれません。:
 
     >
     inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 <
 
 同じことをLuaでやると大変です。
-次のようにやるかもしれません:
+次のようにやるかもしれません。:
 
     >
     function _G.smart_tab()
 	return vim.fn.pumvisible() == 1 and [[\<C-n>]] or [[\<Tab>]]
     end
+
     vim.api.nvim_set_keymap('i', '<Tab>', 'v:lua.smart_tab()', {expr =
     true, noremap = true})
 <
 
 マッピングに `\<Tab>` と `\<C-n>` が挿入されているのを知るためだけに...
 
-キーコードをエスケープできるのは、Vimscriptの機能です。
+キーコードをエスケープできるのは、Vim scriptの機能です。
 `\r`, `\42` や `\x10` のような多くのプログラミング言語に共通する通常のエスケープシーケンスとは別に、
-Vimsriptの `expr-quotes` (二重引用符で囲まれる文字列)を使用すると、
+Vim scriptの `expr-quotes` (ダブルクォートで囲まれる文字列)を使用すると、
 人間が読める表現のVimキーコードをエスケープします。
 
 Luaにはそのような機能は組み込まれていません。
-嬉しいことに、ターミナルコードとキーコードをエスケープするNeovimのAPI関数が
-`nvim_replace_termcodes()` です:
+嬉しいことに、NeovimにはターミナルコードとキーコードをエスケープするAPI関数
+`nvim_replace_termcodes()` があります。:
 
     >
     print(vim.api.nvim_replace_termcodes('<Tab>', true, true, true))
 <
 
-これは少し冗長です。再利用できるラッパーを作ると便利です:
+これは少し冗長です。再利用できるラッパーを作ると便利です。:
 
     >
     -- `termcodes` 専用の `t` 関数です
-    -- この関数を呼ばなくてもいいですが、この簡潔さが便利です
+    -- この名前で呼ばなくてもいいですが、この簡潔さが便利です
     local function t(str)
 	-- 必要に応じてboolean引数で調整します
 	return vim.api.nvim_replace_termcodes(str, true, true, true)
     end
+
     print(t'<Tab>')
 <
 
-先程の例はこれで期待通りに動きます:
+先程の例はこれで期待通りに動きます。:
 
     >
     local function t(str)
 	return vim.api.nvim_replace_termcodes(str, true, true, true)
     end
+
     function _G.smart_tab()
 	return vim.fn.pumvisible() == 1 and t'<C-n>' or t'<Tab>'
     end
+
     vim.api.nvim_set_keymap('i', '<Tab>', 'v:lua.smart_tab()', {expr =
     true, noremap = true})
 <
@@ -804,6 +860,7 @@ Luaで無効な変数名は`vim.fn[variable]`で使用できます。
     >
     vim.fn['my#autoload#function']()
 <
+`vim.fn`は`vim.call`と同じ動作ですが、よりLuaらしい構文を使用できます。
 
 参照:
 - |vim.fn|
@@ -814,6 +871,10 @@ Neovimにはプラグインに便利な強力な組込み関数を含むライ�
 アルファベット順のリストは`:help
 vim-function`を参照してください。
 `:help function-list`は機能別に分類されたリストです。
+
+NeovimのAPI関数は`vim.api{..}`のように使う必要があります。例えば、
+`vim.fn.nvim_list_uis()`の代わりに`vim.api.nvim_list_uis()`を使用します。
+詳細は`:help api`を参照してください。
 
 警告~
 
@@ -1005,16 +1066,6 @@ sumneko/lua-language-server: https://github.com/sumneko/lua-language-server/ の
 coc.nvim~
 
  coc.nvim: https://github.com/neoclide/coc.nvim/ の補完ソースである rafcamlet/coc-nvim-lua: https://github.com/rafcamlet/coc-nvim-lua/ はNeovim stdlibの項目を提供しています。
-
-	*Todo	tasks:
-- Hot-reloading of modules
-- `vim.validate()`?
-- Add stuff about unit tests? I know Neovim uses the  busted:
-https://olivinelabs.com/busted/  framework, but I don't know how to use
-it for plugins
-- Best practices? I'm not a Lua wizard so I wouldn't know
-- How to use LuaRocks packages	 wbthomason/packer.nvim:
-https://github.com/wbthomason/packer.nvim ?
 
 ==============================================================================
 その他

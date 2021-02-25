@@ -774,6 +774,9 @@ vim.fn.jobstart('ls', { on_stdout = print_stdout })
 vim.fn['my#autoload#function']()
 ```
 
+The functionality of `vim.fn` is identical to `vim.call`, but allows a more Lua-like syntax.
+`vim.fn`は`vim.call`と同じ動作ですが、よりLuaらしい構文を使用できます。
+
 参照:
 - `:help vim.fn`
 
@@ -782,6 +785,9 @@ vim.fn['my#autoload#function']()
 Neovimにはプラグインに便利な強力な組込み関数を含むライブラリがあります。
 アルファベット順のリストは`:help vim-function`を参照してください。
 `:help function-list`は機能別に分類されたリストです。
+
+NeovimのAPI関数は`vim.api{..}`のように使う必要があります。例えば、`vim.fn.nvim_list_uis()`の代わりに`vim.api.nvim_list_uis()`を使用します。
+詳細は`:help api`を参照してください。
 
 #### 警告
 

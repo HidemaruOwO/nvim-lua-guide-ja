@@ -70,6 +70,7 @@ Neovimの[ファーストクラス言語](https://github.com/neovim/neovim/wiki/
 まだLuaについて詳しくない場合、学ぶためのリソースはたくさんあります。:
 
 - [Learn X in Y minutes page about Lua](https://learnxinyminutes.com/docs/lua/)は基本的な概要を説明します。
+- [このガイド](https://github.com/medwatt/Notes/blob/main/Lua/Lua_Quick_Guide.ipynb)も素早く始めるのに良いチュートリアルです。
 - 動画が好きなら、Derek Banasの動画があります。[1-hour tutorial on the language](https://www.youtube.com/watch?v=iMacxZQMPXs)
 - [lua-users wiki](http://lua-users.org/wiki/LuaDirectory)にはLua関連のトピックごとの便利な情報がたくさんあります。
 - [official reference manual for Lua](https://www.lua.org/manual/5.1/)には最も包括的な情報があります。

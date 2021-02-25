@@ -10,7 +10,6 @@
   * [その他のLuaファイル](#その他のLuaファイル)
     * [警告](#警告)
     * [Tips](#tips)
-    * [パッケージについての注意](#パッケージについての注意)
 * [Vim scriptからLuaを使用する](#vim-scriptからluaを使用する)
    * [:lua](#lua)
    * [:luado](#luado)
@@ -21,13 +20,14 @@
       * [警告](#警告-1)
    * [Tips](#tips-1)
 * [vim名前空間](#vim名前空間)
-      * [Tips](#tips-2)
+   * [Tips](#tips-2)
 * [LuaからVim scriptを使用する](#luaからvim-scriptを使用する)
    * [vim.api.nvim_eval()](#vimapinvim_eval)
       * [警告](#警告-2)
    * [vim.api.nvim_exec()](#vimapinvim_exec)
    * [vim.api.nvim_command()](#vimapinvim_command)
       * [Tips](#tips-3)
+   * [vim.api.nvim_replace_termcodes()](#vimapinvim_replace_termcodes)
 * [vimオプションを管理する](#vimオプションを管理する)
    * [API関数を使用する](#api関数を使用する)
    * [メタアクセサーを使用する](#メタアクセサーを使用する)
@@ -87,6 +87,7 @@ Luaでプラグインを書くためのチュートリアルが既にいくつ�
 - [2n.pl - プラグインをLuaで書く方法](https://www.2n.pl/blog/how-to-write-neovim-plugins-in-lua.md)
 - [2n.pl - プラグインのUIをLuaで作る方法](https://www.2n.pl/blog/how-to-make-ui-for-neovim-plugins-in-lua)
 - [ms-jpq - Neovim Async Tutorial](https://ms-jpq.github.io/neovim-async-tutorial/)
+- [oroques.dev - Neovim 0.5の機能とinit.luaへの切り替え](https://oroques.dev/notes/neovim-init/)
 
 ### 関連するプラグイン
 
@@ -171,34 +172,6 @@ require('other_modules') -- other_modules/init.luaをロード
 異なる2つのプラグインに`lua/main.lua`がある場合、`require('main')`は曖昧です。: どのファイルを読み込みますか？
 
 トップレベルのフォルダで名前空間をつけることをお勧めします。: `lua/plugin_name/main.lua`
-
-#### パッケージについての注意
-
-**UPDATE**: 最新のnightlyビルドを使用している場合、[問題](https://github.com/neovim/neovim/pull/13119)は解決しているので、このセクションを安全に飛ばすことができます。
-
-`packages`機能やそれをベースとしたパッケージマネージャ([packer.nvim](https://github.com/wbthomason/packer.nvim), [minpac](https://github.com/k-takata/minpac),  [vim-packager](https://github.com/kristijanhusak/vim-packager/)等)を使用している場合、Luaプラグインを使用する際に注意することがあります。
-
-`start`フォルダ内のパッケージは`init.vim`の後に読み込まれます。これは、Neovimの処理が終わるまで`runtimepath`にパッケージが追加されないことを意味します。
-プラグインがLuaモジュールを`require`するかautoload関数を呼ぶことを期待している場合に問題を起す可能性があります。
-
-`start/foo`に`lua/bar.lua`があるとします。`init.vim`から下記を行うと`runtimepath`がまだ更新されていないためエラーになります。:
-
-```vim
-lua require('bar')
-```
-
-モジュールを`require`する前に`packadd! foo`を行う必要があります。
-
-```vim
-packadd! foo
-lua require('bar')
-```
-
-`packadd`に`!`を付けると、`plugin`または`ftdetect`のスクリプトが読みこまれず、`runtimepath`にパッケージが追加されます。
-
-参照:
-- `:help :packadd`
-- [Issue #11409](https://github.com/neovim/neovim/issues/11409)
 
 ## Vim scriptからLuaを使用する
 
@@ -359,7 +332,7 @@ echo luaeval('string.format("Lua is %s", _A)', 'awesome')
 
 ### v:lua
 
-Vimのグローバル変数です。Vim scriptからLuaのグローバル関数を直接呼ぶことができます。
+Vimのグローバル変数です。Vim scriptからLuaのグローバル名前空間([`_G`](https://www.lua.org/manual/5.1/manual.html#pdf-_G)) 内の関数を直接呼ぶことができます。
 この場合でも、Vim scriptの型はLuaの型に変換されます。逆も同様です。
 
 ```vim
@@ -393,18 +366,14 @@ set statusline=%!v:lua.statusline()
 " Also works in expression mappings
 lua << EOF
 function _G.check_back_space()
-    local col = vim.fn.col('.') - 1
-    if col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') then
-        return true
-    else
-        return false
-    end
+    local col = vim.api.nvim_win_get_cursor(0)[2]
+    return (col == 0 or vim.api.nvim_get_current_line():sub(col, col):match('%s')) and true
 end
 EOF
 
 inoremap <silent> <expr> <Tab>
-    \ pumvisible() ? '\<C-n>' :
-    \ v:lua.check_back_space() ? '\<Tab>' :
+    \ pumvisible() ? "\<C-n>" :
+    \ v:lua.check_back_space() ? "\<Tab>" :
     \ completion#trigger_completion()
 ```
 
@@ -549,6 +518,68 @@ vim.cmd('%s/\\Vfoo/bar/g')
 vim.cmd([[%s/\Vfoo/bar/g]])
 ```
 
+### vim.api.nvim_replace_termcodes()
+
+このAPI関数はターミナルコードとVimのキーコードをエスケープできます。
+
+次のようなマッピングを見たことがあるかもしれません。:
+
+```vim
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+```
+
+同じことをLuaでやると大変です。次のようにやるかもしれません。:
+
+```lua
+function _G.smart_tab()
+    return vim.fn.pumvisible() == 1 and [[\<C-n>]] or [[\<Tab>]]
+end
+
+vim.api.nvim_set_keymap('i', '<Tab>', 'v:lua.smart_tab()', {expr = true, noremap = true})
+```
+
+マッピングに `\<Tab>` と `\<C-n>` が挿入されているのを知るためだけに...
+
+キーコードをエスケープできるのは、Vim scriptの機能です。`\r`, `\42` や `\x10` のような多くのプログラミング言語に共通する通常のエスケープシーケンスとは別に、Vim scriptの `expr-quotes` (ダブルクォートで囲まれる文字列)を使用すると、人間が読める表現のVimキーコードをエスケープします。
+
+Luaにはそのような機能は組み込まれていません。嬉しいことに、NeovimにはターミナルコードとキーコードをエスケープするAPI関数 `nvim_replace_termcodes()` があります。:
+
+```lua
+print(vim.api.nvim_replace_termcodes('<Tab>', true, true, true))
+```
+
+これは少し冗長です。再利用できるラッパーを作ると便利です。:
+
+```lua
+-- `termcodes` 専用の `t` 関数です
+-- この名前で呼ばなくてもいいですが、この簡潔さが便利です
+local function t(str)
+    -- 必要に応じてboolean引数で調整します
+    return vim.api.nvim_replace_termcodes(str, true, true, true)
+end
+
+print(t'<Tab>')
+```
+
+先程の例はこれで期待通りに動きます:
+
+```lua
+local function t(str)
+    return vim.api.nvim_replace_termcodes(str, true, true, true)
+end
+
+function _G.smart_tab()
+    return vim.fn.pumvisible() == 1 and t'<C-n>' or t'<Tab>'
+end
+
+vim.api.nvim_set_keymap('i', '<Tab>', 'v:lua.smart_tab()', {expr = true, noremap = true})
+```
+
+参照:
+- `:help keycodes`
+- `:help expr-quote`
+- `:help nvim_replace_termcodes()`
+
 ## vimオプションを管理する
 
 ### API関数を使用する
@@ -608,6 +639,8 @@ print(vim.api.nvim_buf_get_option(10, 'shiftwidth')) -- 4
 ```lua
 vim.o.smarttab = false
 print(vim.o.smarttab) -- false
+vim.o.isfname = vim.o.isfname .. ',@-@' -- on Linux: set isfname+=@-@
+print(vim.o.listchars) -- '@,48-57,/,.,-,_,+,,,#,$,%,~,=,@-@'
 
 vim.bo.shiftwidth = 4
 print(vim.bo.shiftwidth) -- 4
@@ -827,8 +860,10 @@ Neovimはマッピングを設定、取得、削除するためのAPI関数を�
 バッファローカルなマッピングは、バッファ番号を引数の最初に受け取ります(`0`を指定した場合、カレントバッファです)。
 
 ```lua
-vim.api.nvim_set_keymap('n', '<leader><Space>', ':set hlsearch!<CR>', { noremap = true, silent = true })
--- :nnoremap <silent> <leader><Space> :set hlsearch<CR>
+vim.api.nvim_set_keymap('n', '<Leader><Space>', ':set hlsearch!<CR>', { noremap = true, silent = true })
+-- :nnoremap <silent> <Leader><Space> :set hlsearch<CR>
+vim.api.nvim_set_keymap('n', '<Leader>tegf',  [[<Cmd>lua require('telescope.builtin').git_files()<CR>]], { noremap = true, silent = true })
+-- :nnoremap <silent> <Leader>tegf <Cmd>lua require('telescope.builtin').git_files()<CR>
 
 vim.api.nvim_buf_set_keymap(0, '', 'cc', 'line(".") == 1 ? "cc" : "ggcc"', { noremap = true, expr = true })
 -- :noremap <buffer> <expr> cc line('.') == 1 ? 'cc' : 'ggcc'
@@ -852,8 +887,8 @@ print(vim.inspect(vim.api.nvim_buf_get_keymap(0, 'i')))
 `vim.api.nvim_del_keymap()`は、モードと左側のマッピングを受け取ります。
 
 ```lua
-vim.api.nvim_del_keymap('n', '<leader><Space>')
--- :nunmap <leader><Space>
+vim.api.nvim_del_keymap('n', '<Leader><Space>')
+-- :nunmap <Leader><Space>
 ```
 
 この場合でも、`vim.api.nvim_buf_del_keymap()`は最初の引数にバッファ番号を受け取ります。`0`を指定した場合、カレントバッファです。
@@ -910,33 +945,7 @@ globals = {
 
 #### sumneko/lua-language-server
 
-[sumneko/lua-language-server](https://github.com/sumneko/lua-language-server/)の設定例です。(例は組込みのLSPクライアントを使っていますが、他のLSPクライアントでも同じ設定である必要があります）:
-
-```lua
-require'lspconfig'.sumneko_lua.setup {
-    settings = {
-        Lua = {
-            runtime = {
-                -- LuaJITやLua 5.4などのバージョンを設定します。
-                version = 'LuaJIT',
-                -- luaのpathを設定します。
-                path = vim.split(package.path, ';'),
-            },
-            diagnostics = {
-                -- vimモジュールを設定します。
-                globals = {'vim'},
-            },
-            workspace = {
-                -- Neovimのランタイムファイルを設定します。
-                library = {
-                    [vim.fn.expand('$VIMRUNTIME/lua')] = true,
-                    [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
-                },
-            },
-        },
-    },
-}
-```
+[nvim-lspconfig](https://github.com/neovim/nvim-lspconfig/)リポジトリに[sumneko/lua-language-serverの設定方法](https://github.com/neovim/nvim-lspconfig/blob/master/CONFIG.md#sumneko_lua)があります（例は組込みのLSPクライアントを使っていますが、他のLSPクライアントでも同じ設定である必要があります）。
 
 [sumneko/lua-language-server](https://github.com/sumneko/lua-language-server/)の設定方法の詳細は["Setting without VSCode"](https://github.com/sumneko/lua-language-server/wiki/Setting-without-VSCode)を見てください。
 

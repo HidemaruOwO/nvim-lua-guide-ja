@@ -959,13 +959,6 @@ require'lspconfig'.sumneko_lua.setup {
 
 [coc.nvim](https://github.com/neoclide/coc.nvim/)の補完ソースである[rafcamlet/coc-nvim-lua](https://github.com/rafcamlet/coc-nvim-lua/)はNeovim stdlibの項目を提供しています。
 
-**TODO**:
-- Hot-reloading of modules
-- `vim.validate()`?
-- Add stuff about unit tests? I know Neovim uses the [busted](https://olivinelabs.com/busted/) framework, but I don't know how to use it for plugins
-- Best practices? I'm not a Lua wizard so I wouldn't know
-- How to use LuaRocks packages ([wbthomason/packer.nvim](https://github.com/wbthomason/packer.nvim)?)
-
 ## その他
 
 ### vim.loop

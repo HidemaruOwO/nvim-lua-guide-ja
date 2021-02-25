@@ -727,34 +727,10 @@ echo g:variable
 
 ## Vim scriptの関数を呼び出す
 
-### vim.call()
-
-`vim.call()`はVim scriptの関数を呼び出します。Vimの組込み関数とユーザー定義関数のどちらかで使用できます。
-この場合でも、データ型はLuaからVim scriptに変換されます。
-
-対象の関数名とその引数を受け取ります。:
-
-```lua
-print(vim.call('printf', 'Hello from %s', 'Lua'))
-
-local reversed_list = vim.call('reverse', { 'a', 'b', 'c' })
-print(vim.inspect(reversed_list)) -- { "c", "b", "a" }
-
-local function print_stdout(chan_id, data, name)
-    print(data[1])
-end
-
-vim.call('jobstart', 'ls', { on_stdout = print_stdout })
-
-vim.call('my#autoload#function')
-```
-
-参照:
-- `:help vim.call()`
-
 ### vim.fn.{function}()
 
-`vim.fn`は`vim.call()`と同じですが、ネイティブなLua関数を呼んでいるように見えます。:
+`vim.fn`は、Vim script組込みの関数とユーザー定義関数の両方を呼び出せます。
+型はVimとLuaとで変換されます。
 
 ```lua
 print(vim.fn.printf('Hello from %s', 'Lua'))
@@ -769,13 +745,13 @@ end
 vim.fn.jobstart('ls', { on_stdout = print_stdout })
 ```
 
-`#`はLuaで有効な識別子ではないため、autoload関数は次の構文で呼び出す必要があります。:
+Luaで無効な変数名は`vim.fn[variable]`で使用できます。
+例えば、ハッシュ(`#`)は有効な識別子ではないため、autoload関数はこの構文で呼び出す必要があります。:
 
 ```lua
 vim.fn['my#autoload#function']()
 ```
 
-The functionality of `vim.fn` is identical to `vim.call`, but allows a more Lua-like syntax.
 `vim.fn`は`vim.call`と同じ動作ですが、よりLuaらしい構文を使用できます。
 
 参照:

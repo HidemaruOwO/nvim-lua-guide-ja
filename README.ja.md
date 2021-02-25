@@ -60,7 +60,8 @@ Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
 
 ## はじめに
 
-Neovimのファーストクラス言語としてのLuaはキラー機能の1つになりつつあります。しかし、Luaでプラグインを書くための教材はVim script程多くありません。これは、Luaを始めるための基本的な情報を提供する試みです。
+Neovimの[ファーストクラス言語](https://github.com/neovim/neovim/wiki/FAQ#why-embed-lua-instead-of-x)としての[Lua](https://www.youtube.com/watch?v=IP3J56sKtn0)はキラー機能の1つになりつつあります。
+しかし、Luaでプラグインを書くための教材はVim script程多くありません。これは、Luaを始めるための基本的な情報を提供する試みです。
 
 このガイドは最新の[nightly build](https://github.com/neovim/neovim/releases/tag/nightly)を使用していることを前提としています。Neovim 0.5は開発中で一部のAPIは正式リリース前に変更される可能性があることに注意してください。
 

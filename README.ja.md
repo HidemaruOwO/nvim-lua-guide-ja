@@ -77,7 +77,7 @@ Neovimの[ファーストクラス言語](https://github.com/neovim/neovim/wiki/
 
 Luaはとてもクリーンでシンプルな言語であることに注意してください。JavaScriptのようなスクリプト言語の経験があれば、学ぶことは簡単です。あなたはもう自分で思っているよりLuaについて知っているかもしれません！
 
-Note: Neovimに埋め込まれているLuaはLuaJIT 2.1.0でLua 5.1(と、いくつかの5.2拡張)と互換性を維持しています。
+Note: Neovimに埋め込まれているLuaは[LuaJIT](https://staff.fnwi.uva.nl/h.vandermeer/docs/lua/luajit/luajit_intro.html) 2.1.0でLua 5.1(と、いくつかの5.2拡張)と互換性を維持しています。
 
 ### Luaを書くための既存のチュートリアル
 

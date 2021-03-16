@@ -762,7 +762,7 @@ echo g:variable
 
 ### vim.fn.{function}()
 
-`vim.fn`は、Vim script組込みの関数とユーザー定義関数の両方を呼び出せます。
+`vim.fn`は、Vim script組込みの関数を呼び出せます。
 型はVimとLuaとで変換されます。
 
 ```lua
@@ -796,7 +796,7 @@ Neovimにはプラグインに便利な強力な組込み関数を含むライ�
 アルファベット順のリストは`:help vim-function`を参照してください。
 `:help function-list`は機能別に分類されたリストです。
 
-NeovimのAPI関数は`vim.api{..}`のように使う必要があります。例えば、`vim.fn.nvim_list_uis()`の代わりに`vim.api.nvim_list_uis()`を使用します。
+NeovimのAPI関数は`vim.api{..}`のように直接使用できます。
 詳細は`:help api`を参照してください。
 
 #### 警告

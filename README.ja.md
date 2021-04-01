@@ -659,10 +659,12 @@ vim.wo.number = true -- same as vim.api.nvim_win_set_option(0, 'number', true)
 #### 警告
 
 Luaでは`:set`相当のものはなく、グローバルかローカルのどちらかを設定します。
+`init.lua`でオプションを設定する場合、`vim.o.{option}`と`vim.{wo/bo}.{option}`の両方を必要とするものがあります。
 
 参照:
 - `:help :setglobal`
 - `:help global-local`
+- [Pull request #13479](https://github.com/neovim/neovim/pull/13479)
 
 ## vim内部の変数を管理する
 

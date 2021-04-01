@@ -28,6 +28,8 @@ tutorial on the language: https://www.youtube.com/watch?v=iMacxZQMPXs
 にはLua関連のトピックごとの便利な情報がたくさんあります。
 -  official reference manual for Lua: https://www.lua.org/manual/5.1/
 には最も包括的な情報があります。
+エディタで快適に読みたいなら、Vimdocプラグインがあります。:
+wsdjeg/luarefvim: https://github.com/wsdjeg/luarefvim
 
 Luaはとてもクリーンでシンプルな言語であることに注意してください。
 JavaScriptのようなスクリプト言語の経験があれば、学ぶことは簡単です。
@@ -35,8 +37,7 @@ JavaScriptのようなスクリプト言語の経験があれば、学ぶこと�
 
 Note: Neovimに埋め込まれているLuaはLuaJIT:
 https://staff.fnwi.uva.nl/h.vandermeer/docs/lua/luajit/luajit_intro.html
-2.1.0でLua
-5.1(と、いくつかの5.2拡張)と互換性を維持しています。
+2.1.0でLua 5.1(と、いくつかの5.2拡張)と互換性を維持しています。
 
 Luaを書くための既存のチュートリアル~
 

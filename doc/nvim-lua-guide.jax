@@ -378,9 +378,6 @@ scriptからLuaのグローバル名前空間(`_G`: https://www.lua.org/manual/5
     echo scream
     " 'AAAAAAAAAA'
 
-    " Requiring modules works
-    call v:lua.require('mymodule').myfunction()
-
     " How about a nice statusline?
     lua << EOF
     function _G.statusline()

@@ -728,6 +728,9 @@ vim.fn['my#autoload#function']()
 
 `vim.fn`は`vim.call`と同じ動作ですが、よりLuaらしい構文を使用できます。
 
+`vim.api.nvim_call_function`とは、Vim/Luaオブジェクトを自動で変換する点が異なります。:
+`vim.api.nvim_call_function`は浮動小数点数のテーブルを返しLuaのクロージャーを受け入れませんが、`vim.fn`はこれらの型を扱えます。
+
 参照:
 - `:help vim.fn`
 

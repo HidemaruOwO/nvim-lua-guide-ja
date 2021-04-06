@@ -868,6 +868,93 @@ syntax APIはまだ作業中です。いくつかのポインターがありま�
 
 ## 一般的なTipsと推奨
 
+### Vim script <--> Lua 型変換の注意
+
+#### 変数を変換するとコピーが作られます:
+
+VimからLua、LuaからVimのオブジェクトの参照を直接操作できません。
+例えば、Vim scriptの`map()`は変数をその場で変更します(破壊的)。
+
+```vim
+let s:list = [1, 2, 3]
+let s:newlist = map(s:list, {_, v -> v * 2})
+
+echo s:list
+" [2, 4, 6]
+echo s:newlist
+" [2, 4, 6]
+```
+
+Luaからこの関数を使用すると、代りにコピーが作られます
+
+```lua
+local tbl = {1, 2, 3}
+local newtbl = vim.fn.map(tbl, function(_, v) return v * 2 end)
+
+print(vim.inspect(tbl)) -- { 1, 2, 3 }
+print(vim.inspect(newtbl)) -- { 2, 4, 6 }
+```
+
+#### 変換を常にできるとは限りません
+
+これは主に関数とテーブルに影響します。
+
+Luaのリストと辞書が混在するテーブルは変換できません。
+
+```lua
+print(vim.fn.count({1, 1, number = 1}, 1))
+-- E5100: Cannot convert given lua table: table should either have a sequence of positive integer keys or contain only string keys
+```
+
+Luaで`vim.fn`を使用してVim関数を呼べますが、それらの参照を保持できません。
+それは不測の動作の原因になります。:
+
+```lua
+local FugitiveHead = vim.fn.funcref('FugitiveHead')
+print(FugitiveHead) -- vim.NIL
+
+vim.cmd("let g:test_dict = {'test_lambda': {-> 1}}")
+print(vim.g.test_dict.test_lambda) -- nil
+print(vim.inspect(vim.g.test_dict)) -- {}
+```
+
+Luaの関数をVimの関数に渡せますが、Vimの変数に格納できません。
+
+```lua
+-- This works:
+vim.fn.jobstart({'ls'}, {
+    on_stdout = function(chan_id, data, name)
+        print(vim.inspect(data))
+    end
+})
+
+-- This doesn't:
+vim.g.test_dict = {test_lambda = function() return 1 end} -- Error: Cannot convert given lua type
+```
+
+ただし、Vim scriptから`luaeval()`を使用して同じことをすると**動作します**。:
+
+```vim
+let g:test_dict = {'test_lambda': luaeval('function() return 1 end')}
+echo g:test_dict
+" {'test_lambda': function('<lambda>4714')}
+```
+
+#### Vim booleans
+Vim scriptの一般的なパターンではbool値の代わりに`1`と`0`を使用します。
+実際、Vimにはバージョン7.4.1154まで区別されたbool型がありませんでした。
+
+Luaのbool値は数値ではなく、Vim scriptの実際のbool値に変換されます。:
+
+```vim
+lua vim.g.lua_true = true
+echo g:lua_true
+" v:true
+lua vim.g.lua_false = false
+echo g:lua_false
+" v:false
+```
+
 ### リンターと言語サーバーの設定
 
 Luaのプロジェクトでリンターや言語サーバーを使用して、診断と自動補完を利用している場合、Neovim固有の設定が必要になる場合があります。人気のあるツールの推奨設定は次のとおりです。:

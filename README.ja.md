@@ -26,8 +26,8 @@ Note: Neovimに埋め込まれているLuaは[LuaJIT](https://staff.fnwi.uva.nl/
 Luaでプラグインを書くためのチュートリアルが既にいくつかあります。それらはこのガイドを書くのに役に立ちました。筆者に感謝します。
 
 - [teukka.tech - init.vimからinit.luaへ](https://teukka.tech/luanvim.html)
-- [2n.pl - プラグインをLuaで書く方法](https://www.2n.pl/blog/how-to-write-neovim-plugins-in-lua.md)
-- [2n.pl - プラグインのUIをLuaで作る方法](https://www.2n.pl/blog/how-to-make-ui-for-neovim-plugins-in-lua)
+- [dev.to - プラグインをLuaで書く方法](https://dev.to/2nit/how-to-write-neovim-plugins-in-lua-5cca)
+- [dev.to - プラグインのUIをLuaで作る方法](https://dev.to/2nit/how-to-make-ui-for-neovim-plugins-in-lua-3b6e)
 - [ms-jpq - Neovim Async Tutorial](https://ms-jpq.github.io/neovim-async-tutorial/)
 - [oroques.dev - Neovim 0.5の機能とinit.luaへの切り替え](https://oroques.dev/notes/neovim-init/)
 

@@ -1005,6 +1005,11 @@ globals = {
 このプラグインは[Debug Adapter Protocol](https://microsoft.github.io/debug-adapter-protocol/)を使用しています。
 デバッグアダプターに接続するには、[mfussenegger/nvim-dap](https://github.com/mfussenegger/nvim-dap/)や[puremourning/vimspector](https://github.com/puremourning/vimspector/)のようなDAPクライアントが必要です。
 
+### Luaコードのテスト
+
+- [plenary.nvim: test harness](https://github.com/nvim-lua/plenary.nvim/#plenarytest_harness)
+- [notomo/vusted](https://github.com/notomo/vusted)
+
 ## その他
 
 ### vim.loop

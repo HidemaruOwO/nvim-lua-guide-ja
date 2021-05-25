@@ -920,32 +920,20 @@ Neovimはマッピングを設定、取得、削除するためのAPI関数を�
 
 最初の引数には有効にするモードの名前を含む文字列を渡します。:
 
-| String value		 | Help page	 | Affected modes
-| Vimscript equivalent |
-| ---------------------- | ------------- |
----------------------------------------- | -------------------- |
-| `''` (an empty string) | `mapmode-nvo` | Normal, Visual, Select,
-Operator-pending | `:map`		|
-| `'n'`			 | `mapmode-n`	 | Normal
-| `:nmap`	       |
-| `'v'`			 | `mapmode-v`	 | Visual and Select
-| `:vmap`	       |
-| `'s'`			 | `mapmode-s`	 | Select
-| `:smap`	       |
-| `'x'`			 | `mapmode-x`	 | Visual
-| `:xmap`	       |
-| `'o'`			 | `mapmode-o`	 | Operator-pending
-| `:omap`	       |
-| `'!'`			 | `mapmode-ic`  | Insert and Command-line
-| `:map!`	       |
-| `'i'`			 | `mapmode-i`	 | Insert
-| `:imap`	       |
-| `'l'`			 | `mapmode-l`	 | Insert, Command-line, Lang-Arg
-| `:lmap`	       |
-| `'c'`			 | `mapmode-c`	 | Command-line
-| `:cmap`	       |
-| `'t'`			 | `mapmode-t`	 | Terminal
-| `:tmap`	       |
+
+| String value           | Help page     | Affected modes                           | Vimscript equivalent |
+| ---------------------- | ------------- | ---------------------------------------- | -------------------- |
+| `''` (an empty string) | `mapmode-nvo` | Normal, Visual, Select, Operator-pending | `:map`               |
+| `'n'`                  | `mapmode-n`   | Normal                                   | `:nmap`              |
+| `'v'`                  | `mapmode-v`   | Visual and Select                        | `:vmap`              |
+| `'s'`                  | `mapmode-s`   | Select                                   | `:smap`              |
+| `'x'`                  | `mapmode-x`   | Visual                                   | `:xmap`              |
+| `'o'`                  | `mapmode-o`   | Operator-pending                         | `:omap`              |
+| `'!'`                  | `mapmode-ic`  | Insert and Command-line                  | `:map!`              |
+| `'i'`                  | `mapmode-i`   | Insert                                   | `:imap`              |
+| `'l'`                  | `mapmode-l`   | Insert, Command-line, Lang-Arg           | `:lmap`              |
+| `'c'`                  | `mapmode-c`   | Command-line                             | `:cmap`              |
+| `'t'`                  | `mapmode-t`   | Terminal                                 | `:tmap`              |
 
 2つ目の引数は、左側のマッピングを含む文字列(マッピングで定義されたコマンドを起動するためのキー)です。
 空の文字列は`<Nop>`と同じで、キーを無効にします。
@@ -1184,6 +1172,11 @@ https://github.com/jbyuki/one-small-step-for-vimkind でデバッグできます
 デバッグアダプターに接続するには、 mfussenegger/nvim-dap: https://github.com/mfussenegger/nvim-dap/ や
 puremourning/vimspector: https://github.com/puremourning/vimspector/ のようなDAPクライアントが必要です。
 
+Luaコードのテスト
+
+-  plenary.nvim: test harness:
+https://github.com/nvim-lua/plenary.nvim/#plenarytest_harness
+-  notomo/vusted: https://github.com/notomo/vusted
 
 ==============================================================================
 その他

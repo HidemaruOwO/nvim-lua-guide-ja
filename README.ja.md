@@ -437,10 +437,19 @@ vim.api.nvim_command('set nonumber')
 vim.api.nvim_command('%s/foo/bar/g')
 ```
 
-Note: `vim.cmd`はこの関数のエイリアスです。
+### vim.cmd()
+
+`vim.api.nvim_exec()`のエイリアスです。コマンドの引数のみを必要とし、`output`は常に`false`に設定されます。
 
 ```lua
 vim.cmd('buffers')
+vim.cmd([[
+let g:multiline =<< EOF
+foo
+bar
+baz
+EOF
+]])
 ```
 
 #### Tips

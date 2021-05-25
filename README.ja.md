@@ -1010,6 +1010,11 @@ globals = {
 - [plenary.nvim: test harness](https://github.com/nvim-lua/plenary.nvim/#plenarytest_harness)
 - [notomo/vusted](https://github.com/notomo/vusted)
 
+### Luarocksパッケージを使用する
+
+[wbthomason/packer.nvim](https://github.com/wbthomason/packer.nvim)はLuarockパッケージをサポートしています。
+使い方は[README](https://github.com/wbthomason/packer.nvim/#luarocks-support)にあります。
+
 ## その他
 
 ### vim.loop

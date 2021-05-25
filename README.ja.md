@@ -868,6 +868,20 @@ syntax APIはまだ作業中です。いくつかのポインターがありま�
 
 ## 一般的なTipsと推奨
 
+### キャッシュされたモジュールのリロード
+
+Luaでは、`require()`関数がモジュールをキャッシュします。
+これはパフォーマンスには良いですが、後から`require()`を呼んでもモジュールは更新されないため少し面倒です。
+
+特定のモジュールのキャッシュを更新する場合、`packer.loaded`グローバルテーブルを変更する必要があります。:
+
+```lua
+package.loaded['modname'] = nil
+require('modname') -- 新しい'modname'モジュールを読み込みます
+```
+
+[nvim-lua/plenary.nvim](https://github.com/nvim-lua/plenary.nvim)には、これを行う[関数](https://github.com/nvim-lua/plenary.nvim/blob/master/lua/plenary/reload.lua)があります。
+
 ### Vim script <--> Lua 型変換の注意
 
 #### 変数を変換するとコピーが作られます:

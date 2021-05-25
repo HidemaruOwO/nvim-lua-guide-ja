@@ -51,7 +51,7 @@ https://dev.to/2nit/how-to-write-neovim-plugins-in-lua-5cca
 -  2n.pl - プラグインのUIをLuaで作る方法:
 https://dev.to/2nit/how-to-make-ui-for-neovim-plugins-in-lua-3b6e
 -  ms-jpq - Neovim Async Tutorial:
-https://ms-jpq.github.io/neovim-async-tutorial/
+https://github.com/ms-jpq/neovim-async-tutorial
 -  oroques.dev - Neovim 0.5の機能とinit.luaへの切り替え:
 https://oroques.dev/notes/neovim-init/
 

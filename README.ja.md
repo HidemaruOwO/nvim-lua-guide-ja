@@ -984,6 +984,13 @@ globals = {
 
 [coc.nvim](https://github.com/neoclide/coc.nvim/)の補完ソースである[rafcamlet/coc-nvim-lua](https://github.com/rafcamlet/coc-nvim-lua/)はNeovim stdlibの項目を提供しています。
 
+### Luaコードのデバッグ
+
+別のNeovimインスタンスで実行しているLuaコードを[jbyuki/one-small-step-for-vimkind](https://github.com/jbyuki/one-small-step-for-vimkind)でデバッグできます。
+
+このプラグインは[Debug Adapter Protocol](https://microsoft.github.io/debug-adapter-protocol/)を使用しています。
+デバッグアダプターに接続するには、[mfussenegger/nvim-dap](https://github.com/mfussenegger/nvim-dap/)や[puremourning/vimspector](https://github.com/puremourning/vimspector/)のようなDAPクライアントが必要です。
+
 ## その他
 
 ### vim.loop

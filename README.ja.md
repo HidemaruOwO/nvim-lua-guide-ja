@@ -54,10 +54,10 @@ Note: `init.lua`は*完全に*オプションです。`init.vim`は廃止され�
 参照:
 - `:help config`
 
-### その他のLuaファイル
+### モジュール
 
-Luaファイルは通常、`runtimepath`内の`lua/`フォルダにあります(ほとんどの場合、\*nixでは`~/.config/nvim/lua`、Windowsでは`~/AppData/Local/nvim/lua`を意味します)。
-これらのファイルをLuaモジュールとして`require()`できます。
+Luaモジュールは、`runtimepath`内の`lua/`フォルダにあります(ほとんどの場合、\*nixでは`~/.config/nvim/lua`、Windowsでは`~/AppData/Local/nvim/lua`を意味します)。
+このフォルダにあるファイルをLuaモジュールとして`require()`できます。
 
 例として次のフォルダ構造を取り上げましょう。:
 
@@ -102,13 +102,21 @@ require('other_modules') -- other_modules/init.luaをロード
 
 詳細は`:help lua-require`を参照してください。
 
-#### 警告
+#### Runtime files
 
-.vimファイルと違い、.luaファイルは`runtimepath`内の特別なディレクトリから自動的に読み込まれません。
-例えば、`plugin/foo.vim`は自動的に読み込まれますが、`plugin/foo.lua`は読み込まれません。
+Vim scriptと同様に、`runtimepath`内にある特定のフォルダからLuaファイルを自動的に読み込めます。
+現在、次のフォルダがサポートされています。:
+
+- `colors/`
+- `compiler/`
+- `ftplugin/`
+- `ftdetect/`
+- `indent/`
+- `plugin/`
+- `syntax/`
 
 参照:
-- [Issue #12670](https://github.com/neovim/neovim/issues/12670)
+- `:help 'runtimepath'`
 
 #### Tips
 

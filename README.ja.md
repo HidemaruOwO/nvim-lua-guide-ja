@@ -605,6 +605,39 @@ vim.bo[4].expandtab = true -- same as vim.api.nvim_buf_set_option(4, 'expandtab'
 vim.wo.number = true -- same as vim.api.nvim_win_set_option(0, 'number', true)
 ```
 
+これらには、Luaで設定するのに便利なより洗練されたラッパーとして`vim.opt`があります。
+`init.vim`で慣れているものと似ています。:
+
+- `vim.opt.{option}`: `:set`のように動作します
+- `vim.opt_global.{option}`: `:setglobal`のように動作します
+- `vim.opt_local.{option}`: `:setlocal`のように動作します
+
+```lua
+vim.opt.smarttab = false
+print(vim.opt.smarttab:get()) -- false
+```
+
+いくつかのオプションはLuaのテーブルを使用して設定できます。:
+
+```lua
+vim.opt.completeopt = {'menuone', 'noselect'}
+print(vim.inspect(vim.opt.completeopt:get())) -- { "menuone", "noselect" }
+```
+
+list、map、setのようなオプションのラッパーには、Vim scriptの`:set+=`, `:set^=`, `:set-=`と同じように動作するメソッドとメタメソッドが用意されています。
+
+```lua
+vim.opt.shortmess:append({ I = true })
+-- どちらも等価です:
+vim.opt.shortmess = vim.opt.shortmess + { I = true }
+
+vim.opt.whichwrap:remove({ 'b', 's' })
+-- どちらも等価です:
+vim.opt.whichwrap = vim.opt.whichwrap - { 'b', 's' }
+```
+
+詳細は、必ず`:help vim.opt`を参照してください。
+
 参照:
 - `:help lua-vim-options`
 

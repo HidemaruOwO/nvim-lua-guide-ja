@@ -583,15 +583,16 @@ print(vim.api.nvim_buf_get_option(10, 'shiftwidth')) -- 4
 
 もっと使い慣れた方法でオプションを設定したい場合、いくつかのメタアクセサーを使用できます。それらは、上記のAPI関数をラップしたものでオプションを変数のように操作できます。:
 
-- `vim.o.{option}`: グローバルオプション
-- `vim.bo.{option}`: バッファオプション
-- `vim.wo.{option}`: ウィンドウオプション
+- `vim.o.{option}`: `:set`のように動作します
+- `vim.go.{option}`: `:setglobal`のように動作します
+- `vim.bo.{option}`: バッファローカルオプションの場合`:setlocal`のように動作します
+- `vim.wo.{option}`: ウィンドウローカルオプションの場合`:setlocal`のように動作します
 
 ```lua
 vim.o.smarttab = false
 print(vim.o.smarttab) -- false
 vim.o.isfname = vim.o.isfname .. ',@-@' -- on Linux: set isfname+=@-@
-print(vim.o.listchars) -- '@,48-57,/,.,-,_,+,,,#,$,%,~,=,@-@'
+print(vim.o.isfname) -- '@,48-57,/,.,-,_,+,,,#,$,%,~,=,@-@'
 
 vim.bo.shiftwidth = 4
 print(vim.bo.shiftwidth) -- 4
@@ -606,16 +607,6 @@ vim.wo.number = true -- same as vim.api.nvim_win_set_option(0, 'number', true)
 
 参照:
 - `:help lua-vim-options`
-
-#### 警告
-
-Luaでは`:set`相当のものはなく、グローバルかローカルのどちらかを設定します。
-`init.lua`でオプションを設定する場合、`vim.o.{option}`と`vim.{wo/bo}.{option}`の両方を必要とするものがあります。
-
-参照:
-- `:help :setglobal`
-- `:help global-local`
-- [Pull request #13479](https://github.com/neovim/neovim/pull/13479)
 
 ## vim内部の変数を管理する
 

@@ -712,6 +712,9 @@ vim.g.some_global_variable = {
 print(vim.inspect(vim.g.some_global_variable)) -- { key1 = "value", key2 = 300 }
 ```
 
+一部の変数名には、Luaの識別子に使用できない文字が含まれている場合があります。
+この構文を使用してこれらの変数を操作できます。: `vim.g['my#variable']`
+
 変数を削除するには単に`nil`を代入します。:
 
 ```lua
@@ -755,8 +758,7 @@ end
 vim.fn.jobstart('ls', { on_stdout = print_stdout })
 ```
 
-Luaで無効な変数名は`vim.fn[variable]`で使用できます。
-例えば、ハッシュ(`#`)は有効な識別子ではないため、autoload関数はこの構文で呼び出す必要があります。:
+ハッシュ(`#`)はLuaで有効な識別子ではないため、autoload関数は次の構文で呼び出す必要があります。:
 
 ```lua
 vim.fn['my#autoload#function']()
@@ -1048,7 +1050,7 @@ globals = {
 
 ### Luarocksパッケージを使用する
 
-[wbthomason/packer.nvim](https://github.com/wbthomason/packer.nvim)はLuarockパッケージをサポートしています。
+[wbthomason/packer.nvim](https://github.com/wbthomason/packer.nvim)はLuarocksパッケージをサポートしています。
 使い方は[README](https://github.com/wbthomason/packer.nvim/#luarocks-support)にあります。
 
 ## その他

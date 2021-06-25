@@ -100,7 +100,16 @@ require('other_modules/anothermodule')
 require('other_modules') -- other_modules/init.luaをロード
 ```
 
-詳細は`:help lua-require`を参照してください。
+参照:
+- `:help lua-require`
+
+#### Tips
+
+いくつかのLuaプラグインは`lua/`フォルダ内に同じ名前のファイルがあるかもしれません。これにより、名前空間の衝突を起こす可能性があります。
+
+異なる2つのプラグインに`lua/main.lua`がある場合、`require('main')`は曖昧です。: どのファイルを読み込みますか？
+
+トップレベルのフォルダで名前空間をつけることをお勧めします。: `lua/plugin_name/main.lua`
 
 #### Runtime files
 
@@ -115,16 +124,16 @@ Vim scriptと同様に、`runtimepath`内にある特定のフォルダからLua
 - `plugin/`
 - `syntax/`
 
+Note: runtimeデイレクトリでは、すべての`*.vim`ファイルは`*.lua`ファイルの前に読み込まれます。
+
+
 参照:
 - `:help 'runtimepath'`
+- `:help load-plugins`
 
 #### Tips
 
-いくつかのLuaプラグインは`lua/`フォルダ内に同じ名前のファイルがあるかもしれません。これにより、名前空間の衝突を起こす可能性があります。
-
-異なる2つのプラグインに`lua/main.lua`がある場合、`require('main')`は曖昧です。: どのファイルを読み込みますか？
-
-トップレベルのフォルダで名前空間をつけることをお勧めします。: `lua/plugin_name/main.lua`
+ランタイムファイルはLuaのモジュールシステムをベースとしていないため、2つのプラグインは`plugin/main.lua`を問題なく持つことができます。
 
 ## Vim scriptからLuaを使用する
 
@@ -191,39 +200,53 @@ Note 2: Luaの`print()`は`:echomsg`と同じように動作します。出力�
 
 - `:help :luado`
 
-### :luafile
+### Luaファイルの読み込み
 
-Luaファイルを読み込みます。
+NeovimはLuaファイルを読み込むためのコマンドを3つ提供しています。
+
+- `:luafile`
+- `:source`
+- `:runtime`
+
+`:luafile`と`:source`はとてもよく似ています。:
 
 ```vim
 :luafile ~/foo/bar/baz/myluafile.lua
+:luafile %
+:source ~/foo/bar/baz/myluafile.lua
+:source %
 ```
 
-これは、.vimファイルの`:source`コマンド、Luaの`dofile()`関数と似ています。
+`:source`は範囲指定もサポートしており、スクリプトの一部を実行するのに役立ちます。:
+
+```vim
+:1,10source
+```
+
+`:runtime`は少し異なります。: `'runtimepath'`オプションで読み込むファイルを指定します。詳細は`:help :runtime`を参照してください。
 
 参照:
 
 - `:help :luafile`
+- `:help :source`
+- `:help :runtime`
 
-#### luafile vs require():
+#### Sourcing a lua file vs calling require():
 
-`lua require()`と`luafile`の違いは何か、どちらを使うべきかを疑問に思うかもしれません。
+`require()`関数を呼ぶこととLuaファイルの読み込みの違いは何か、どちらを使うべきかを疑問に思うかもしれません。
 それらには異なるユースケースがあります。:
 
 - `require()`:
     - Luaの組込み関数です。Luaのモジュールを読み込むのに使用します。
-    - `runtimepath`内にある`lua`フォルダからモジュールを探します。
+    - `'runtimepath'`内にある`lua/`フォルダからモジュールを探します。
     - どのモジュールをロードしたかを記憶し、多重に実行されるのを防ぎます。Neovim実行中に、モジュールに含まれるコードを変更し、もう一度`require()`を実行してもモジュールは更新されません。
-- `:luafile`:
+- `:luafile`, `:source`, `runtime`:
     - Exコマンドです。モジュールには対応していません。
-    - カレンドウィンドウのカレントディレクトリに対する絶対パスか相対パスを指定します。
     - 以前に実行されたかどうかに関わらず実行されます。
+    - `:luafile`と`:source`は現在のウィンドウのディレクトリに対して相対パス・絶対パスを取ります。
+    - `runtime`は、`'rutimepath'`オプションを使用してファイルを探します。
 
-`:luafile`は編集中のLuaファイルを実行することにも役立ちます。:
-
-```vim
-:luafile %
-```
+`:source`や`:runtime`、ランタイムディレクトリから自動的に読み込まれたファイルも`scriptnames`と`--startuptime`に表示されます。
 
 ### luaeval()
 

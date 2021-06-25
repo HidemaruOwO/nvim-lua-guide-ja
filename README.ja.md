@@ -202,7 +202,7 @@ Note 2: Luaの`print()`は`:echomsg`と同じように動作します。出力�
 
 ### Luaファイルの読み込み
 
-NeovimはLuaファイルを読み込むためのコマンドを3つ提供しています。
+NeovimはLuaファイルを読み込むためのEXコマンドを3つ提供しています。
 
 - `:luafile`
 - `:source`

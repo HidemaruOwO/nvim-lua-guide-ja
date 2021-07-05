@@ -765,6 +765,19 @@ echo g:variable
 " {}
 ```
 
+一時的な変数を使用する回避策があります:
+
+```vim
+let g:variable = {}
+lua << EOF
+local tmp = vim.g.variable
+tmp.key = 'a'
+vim.g.variable = tmp
+EOF
+echo g:variable
+" {'key': 'a'}
+```
+
 既知のissue:
 
 - [Issue #12544](https://github.com/neovim/neovim/issues/12544)

@@ -21,6 +21,8 @@ https://learnxinyminutes.com/docs/lua/
 も素早く始めるのに良いチュートリアルです。
 - 動画が好きなら、Derek Banasの動画があります。 1-hour
 tutorial on the language: https://www.youtube.com/watch?v=iMacxZQMPXs
+- 実行できるサンプルを使い、対話的に学びたいですか？
+LuaScript tutorial: https://www.luascript.dev/learn を試してみてください。
 -  lua-users wiki: http://lua-users.org/wiki/LuaDirectory
 にはLua関連のトピックごとの便利な情報がたくさんあります。
 -  official reference manual for Lua: https://www.lua.org/manual/5.1/
@@ -872,7 +874,20 @@ scriptは期待通りに動きません。:
     lua vim.g.variable.key = 'a'
     echo g:variable
     " {}
-<
+
+
+一時的な変数を使用する回避策があります:
+
+    >
+    let g:variable = {}
+    lua << EOF
+    local tmp = vim.g.variable
+    tmp.key = 'a'
+    vim.g.variable = tmp
+    EOF
+    echo g:variable
+    " {'key': 'a'}
+
 
 既知のissue:
 

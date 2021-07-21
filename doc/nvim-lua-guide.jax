@@ -1095,7 +1095,7 @@ https://github.com/tjdevries/colorbuddy.vim
 Luaでは、`require()`関数がモジュールをキャッシュします。
 これはパフォーマンスには良いですが、後から`require()`を呼んでもモジュールは更新されないため少し面倒です。
 
-特定のモジュールのキャッシュを更新する場合、`packer.loaded`グローバルテーブルを変更する必要があります。:
+特定のモジュールのキャッシュを更新する場合、`package.loaded`グローバルテーブルを変更する必要があります。:
 
     >
     package.loaded['modname'] = nil

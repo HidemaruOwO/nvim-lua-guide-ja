@@ -101,6 +101,16 @@ require('other_modules/anothermodule')
 require('other_modules') -- other_modules/init.luaをロード
 ```
 
+存在しないモジュール、構文エラーを含むモジュールをrequireすると実行中のスクリプトは停止します。
+エラーを防ぐために、`pcall()`を使用できます。
+
+```lua
+local ok, _ = pcall(require, 'module_with_error')
+if not ok then
+  -- not loaded
+end
+```
+
 参照:
 - `:help lua-require`
 

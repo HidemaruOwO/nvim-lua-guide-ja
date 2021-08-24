@@ -414,12 +414,13 @@ API関数は、[`:help api-global`](https://neovim.io/doc/user/api.html#api-glob
 オブジェクトの中身を検査するのに毎回`print(vim.inspect(x)`を書くのは面倒です。設定にグローバルなラッパー関数を含めることは価値があるかもしれません。:
 
 ```lua
-function _G.dump(...)
-  local objects, v = {}, nil
+function _G.put(...)
+  local objects = {}
   for i = 1, select('#', ...) do
-    v = select(i, ...)
+    local v = select(i, ...)
     table.insert(objects, vim.inspect(v))
   end
+
   print(table.concat(objects, '\n'))
   return ...
 end

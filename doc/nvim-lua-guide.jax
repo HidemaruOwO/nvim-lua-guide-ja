@@ -487,12 +487,13 @@ Tips~
 オブジェクトの中身を検査するのに毎回`print(vim.inspect(x)`を書くのは面倒です。設定にグローバルなラッパー関数を含めることは価値があるかもしれません。:
 
     >
-    function _G.dump(...)
-      local objects, v = {}, nil
+    function _G.put(...)
+      local objects = {}
       for i = 1, select('#', ...) do
-	v = select(i, ...)
+	local v = select(i, ...)
 	table.insert(objects, vim.inspect(v))
       end
+
       print(table.concat(objects, '\n'))
       return ...
     end
@@ -501,11 +502,11 @@ Tips~
 コードまたはコマンドラインからとても早くオブジェクトの中身を検査できます。
 
     >
-    dump({1, 2, 3})
+    put({1, 2, 3})
 <
 
     >
-    :lua dump(vim.loop)
+    :lua put(vim.loop)
 <
 
 加えて、他の言語と比較して組込みのLua関数が不足している場合があります(例えば、`os.clock`はミリ秒ではなく秒数のみを返します)。

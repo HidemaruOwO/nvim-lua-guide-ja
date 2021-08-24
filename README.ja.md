@@ -1,3 +1,5 @@
+:arrow_upper_left: (迷子になった？ GitHub TOCを使いましょう！)
+
 # Getting started using Lua in Neovim
 
 ## はじめに

@@ -480,6 +480,7 @@ tree-sitterライブラリの機能を公開するモジュール
 lua-stdlib`と`:help lua-vim`が最適です。
 または、`:lua
 print(vim.inspect(vim))`を実行してすべてのモジュールのリストを取得できます。
+API関数は、`:help api-global`にあります。
 
 Tips~
 

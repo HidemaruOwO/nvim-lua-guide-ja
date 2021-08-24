@@ -407,6 +407,7 @@ NeovimはLuaからAPIを使うためのエントリーポイントとして、`v
 
 このリストは決して包括的なリストではありません。`vim`変数で何かできるかを詳しく知りたい場合は、[`:help lua-stdlib`](https://neovim.io/doc/user/lua.html#lua-stdlib)と[`:help lua-vim`](https://neovim.io/doc/user/lua.html#lua-vim)が最適です。
 または、`:lua print(vim.inspect(vim))`を実行してすべてのモジュールのリストを取得できます。
+API関数は、[`:help api-global`](https://neovim.io/doc/user/api.html#api-global)にあります。
 
 #### Tips
 

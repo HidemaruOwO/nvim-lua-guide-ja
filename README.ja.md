@@ -415,9 +415,13 @@ API関数は、[`:help api-global`](https://neovim.io/doc/user/api.html#api-glob
 
 ```lua
 function _G.dump(...)
-    local objects = vim.tbl_map(vim.inspect, {...})
-    print(unpack(objects))
-    return ...
+  local objects, v = {}, nil
+  for i = 1, select('#', ...) do
+    v = select(i, ...)
+    table.insert(objects, vim.inspect(v))
+  end
+  print(table.concat(objects, '\n'))
+  return ...
 end
 ```
 

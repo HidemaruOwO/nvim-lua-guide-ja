@@ -1317,6 +1317,7 @@ Luaを使用する利点の1つは実際にLuaを書く必要がないことで�
 
 lispをLuaにコンパイルします。
 Olical/aniseed: https://github.com/Olical/aniseed
+または、Hotpot: https://github.com/rktjmp/hotpot.nvim
 を使用するとNeovimのプラグインと設定を書くことができます。
 さらに、 Olical/conjure: https://github.com/Olical/conjure
 は対話的な開発環境を提供します 他の言語の中で 。

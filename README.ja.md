@@ -53,7 +53,7 @@ Note: `init.lua`は*完全に*オプションです。`init.vim`は廃止され�
 いくつかの機能は、まだ100%Luaに公開されていないので注意してください。
 
 参照:
-- `:help config`
+- [`:help config`](https://neovim.io/doc/user/starting.html#config)
 
 ### モジュール
 
@@ -112,7 +112,7 @@ end
 ```
 
 参照:
-- `:help lua-require`
+- [`:help lua-require`](https://neovim.io/doc/user/lua.html#lua-require)
 
 #### Tips
 
@@ -139,8 +139,8 @@ Note: runtimeデイレクトリでは、すべての`*.vim`ファイルは`*.lua
 
 
 参照:
-- `:help 'runtimepath'`
-- `:help load-plugins`
+- [`:help 'runtimepath'`](https://neovim.io/doc/user/options.html#'runtimepath')
+- [`:help load-plugins`](https://neovim.io/doc/user/starting.html#load-plugins)
 
 #### Tips
 
@@ -186,8 +186,8 @@ Note 2: Luaの`print()`は`:echomsg`と同じように動作します。出力�
 
 参照:
 
-- `:help :lua`
-- `:help :lua-heredoc`
+- [`:help :lua`](https://neovim.io/doc/user/lua.html#Lua)
+- [`:help :lua-heredoc`](https://neovim.io/doc/user/lua.html#:lua-heredoc)
 
 ### :luado
 
@@ -209,7 +209,7 @@ Note 2: Luaの`print()`は`:echomsg`と同じように動作します。出力�
 
 参照:
 
-- `:help :luado`
+- [`:help :luado`](https://neovim.io/doc/user/lua.html#:luado)
 
 ### Luaファイルの読み込み
 
@@ -234,13 +234,14 @@ NeovimはLuaファイルを読み込むためのEXコマンドを3つ提供し�
 :1,10source
 ```
 
-`:runtime`は少し異なります。: `'runtimepath'`オプションで読み込むファイルを指定します。詳細は`:help :runtime`を参照してください。
+`:runtime`は少し異なります。: `'runtimepath'`オプションで読み込むファイルを指定します。
+詳細は[`:help :runtime`](https://neovim.io/doc/user/repeat.html#:runtime)を参照してください。
 
 参照:
 
-- `:help :luafile`
-- `:help :source`
-- `:help :runtime`
+- [`:help :luafile`](https://neovim.io/doc/user/lua.html#:luafile)
+- [`:help :source`](https://neovim.io/doc/user/repeat.html#:source)
+- [`:help :runtime`](https://neovim.io/doc/user/repeat.html#:runtime)
 
 #### Sourcing a lua file vs calling require():
 
@@ -315,7 +316,7 @@ echo luaeval('string.format("Lua is %s", _A)', 'awesome')
 ```
 
 参照:
-- `:help luaeval()`
+- [`:help luaeval()`](https://neovim.io/doc/user/lua.html#luaeval())
 
 ### v:lua
 
@@ -362,8 +363,8 @@ inoremap <silent> <expr> <Tab>
 ```
 
 参照:
-- `:help v:lua`
-- `:help v:lua-call`
+- [`:help v:lua`](https://neovim.io/doc/user/eval.html#v:lua)
+- [`:help v:lua-call`](https://neovim.io/doc/user/lua.html#v:lua-call)
 
 #### 警告
 
@@ -383,7 +384,7 @@ echo map([1, 2, 3], v:lua.global_callback)
 ### Tips
 
 設定ファイルに、`let g:vimsyn_embed = 'l'`を追加すると.vimファイル内のLuaを構文ハイライトできます。
-詳細は`:h g:vimsyn_embed`を参照してください。
+詳細は[`:help g:vimsyn_embed`](https://neovim.io/doc/user/syntax.html#g:vimsyn_embed)を参照してください。
 
 ## vim名前空間
 
@@ -399,7 +400,7 @@ NeovimはLuaからAPIを使うためのエントリーポイントとして、`v
 - `vim.lsp`: 組込みのLSPクライアントを操作するモジュール
 - `vim.treesitter`: tree-sitterライブラリの機能を公開するモジュール
 
-このリストは決して包括的なリストではありません。`vim`変数で何かできるかを詳しく知りたい場合は、`:h lua-stdlib`と`:help lua-vim`が最適です。
+このリストは決して包括的なリストではありません。`vim`変数で何かできるかを詳しく知りたい場合は、[`:help lua-stdlib`](https://neovim.io/doc/user/lua.html#lua-stdlib)と[`:help lua-vim`](https://neovim.io/doc/user/lua.html#lua-vim)が最適です。
 または、`:lua print(vim.inspect(vim))`を実行してすべてのモジュールのリストを取得できます。
 
 #### Tips
@@ -570,9 +571,9 @@ vim.api.nvim_set_keymap('i', '<Tab>', 'v:lua.smart_tab()', {expr = true, noremap
 ```
 
 参照:
-- `:help keycodes`
-- `:help expr-quote`
-- `:help nvim_replace_termcodes()`
+- [`:help keycodes`](https://neovim.io/doc/user/intro.html#keycodes)
+- [`:help expr-quote`](https://neovim.io/doc/user/eval.html#expr-quote)
+- [`:help nvim_replace_termcodes()`](https://neovim.io/doc/user/api.html#nvim_replace_termcodes())
 
 ## vimオプションを管理する
 
@@ -581,14 +582,14 @@ vim.api.nvim_set_keymap('i', '<Tab>', 'v:lua.smart_tab()', {expr = true, noremap
 Neovimは、オプションの値を読み書きできるAPI関数を提供しています。
 
 - グローバルオプション:
-    - `vim.api.nvim_set_option()`
-    - `vim.api.nvim_get_option()`
+    - [`vim.api.nvim_set_option()`](https://neovim.io/doc/user/api.html#nvim_set_option())
+    - [`vim.api.nvim_get_option()`](https://neovim.io/doc/user/api.html#nvim_get_option())
 - バッファオプション:
-    - `vim.api.nvim_buf_set_option()`
-    - `vim.api.nvim_buf_get_option()`
+    - [`vim.api.nvim_buf_set_option()`](https://neovim.io/doc/user/api.html#nvim_buf_set_option())
+    - [`vim.api.nvim_buf_get_option()`](https://neovim.io/doc/user/api.html#nvim_buf_get_option())
 - ウィンドウオプション:
-    - `vim.api.nvim_win_set_option()`
-    - `vim.api.nvim_win_get_option()`
+    - [`vim.api.nvim_win_set_option()`](https://neovim.io/doc/user/api.html#nvim_win_set_option())
+    - [`vim.api.nvim_win_get_option()`](https://neovim.io/doc/user/api.html#nvim_win_get_option())
 
 それらはオプションの名前と設定したい値を含む文字列を受け取ります。
 
@@ -626,10 +627,10 @@ print(vim.api.nvim_buf_get_option(10, 'shiftwidth')) -- 4
 
 もっと使い慣れた方法でオプションを設定したい場合、いくつかのメタアクセサーを使用できます。それらは、上記のAPI関数をラップしたものでオプションを変数のように操作できます。:
 
-- `vim.o.{option}`: `:set`のように動作します
-- `vim.go.{option}`: `:setglobal`のように動作します
-- `vim.bo.{option}`: バッファローカルオプションの場合`:setlocal`のように動作します
-- `vim.wo.{option}`: ウィンドウローカルオプションの場合`:setlocal`のように動作します
+- [`vim.o.{option}`](https://neovim.io/doc/user/lua.html#vim.o): `:set`のように動作します
+- [`vim.go.{option}`](https://neovim.io/doc/user/lua.html#vim.go): `:setglobal`のように動作します
+- [`vim.bo.{option}`](https://neovim.io/doc/user/lua.html#vim.bo): バッファローカルオプションの場合`:setlocal`のように動作します
+- [`vim.wo.{option}`](https://neovim.io/doc/user/lua.html#vim.wo): ウィンドウローカルオプションの場合`:setlocal`のように動作します
 
 ```lua
 vim.o.smarttab = false
@@ -679,10 +680,10 @@ vim.opt.whichwrap:remove({ 'b', 's' })
 vim.opt.whichwrap = vim.opt.whichwrap - { 'b', 's' }
 ```
 
-詳細は、必ず`:help vim.opt`を参照してください。
+詳細は、必ず[`:help vim.opt`](https://neovim.io/doc/user/lua.html#vim.opt)を参照してください。
 
 参照:
-- `:help lua-vim-options`
+- [`:help lua-vim-options`](https://neovim.io/doc/user/lua.html#lua-vim-options)
 
 ## vim内部の変数を管理する
 
@@ -691,30 +692,30 @@ vim.opt.whichwrap = vim.opt.whichwrap - { 'b', 's' }
 オプションのように、内部変数にもAPI関数があります。
 
 - グローバル変数 (`g:`):
-    - `vim.api.nvim_set_var()`
-    - `vim.api.nvim_get_var()`
-    - `vim.api.nvim_del_var()`
+    - [`vim.api.nvim_set_var()`](https://neovim.io/doc/user/api.html#nvim_set_var())
+    - [`vim.api.nvim_get_var()`](https://neovim.io/doc/user/api.html#nvim_get_var())
+    - [`vim.api.nvim_del_var()`](https://neovim.io/doc/user/api.html#nvim_del_var())
 - バッファ変数 (`b:`):
-    - `vim.api.nvim_buf_set_var()`
-    - `vim.api.nvim_buf_get_var()`
-    - `vim.api.nvim_buf_del_var()`
+    - [`vim.api.nvim_buf_set_var()`](https://neovim.io/doc/user/api.html#nvim_buf_set_var())
+    - [`vim.api.nvim_buf_get_var()`](https://neovim.io/doc/user/api.html#nvim_buf_get_var())
+    - [`vim.api.nvim_buf_del_var()`](https://neovim.io/doc/user/api.html#nvim_buf_del_var())
 - ウィンドウ変数 (`w:`):
-    - `vim.api.nvim_win_set_var()`
-    - `vim.api.nvim_win_get_var()`
-    - `vim.api.nvim_win_del_var()`
+    - [`vim.api.nvim_win_set_var()`](https://neovim.io/doc/user/api.html#nvim_win_set_var())
+    - [`vim.api.nvim_win_get_var()`](https://neovim.io/doc/user/api.html#nvim_win_get_var())
+    - [`vim.api.nvim_win_del_var()`](https://neovim.io/doc/user/api.html#nvim_win_del_var())
 - タブ変数 (`t:`):
-    - `vim.api.nvim_tabpage_set_var()`
-    - `vim.api.nvim_tabpage_get_var()`
-    - `vim.api.nvim_tabpage_del_var()`
+    - [`vim.api.nvim_tabpage_set_var()`](https://neovim.io/doc/user/api.html#nvim_tabpage_set_var())
+    - [`vim.api.nvim_tabpage_get_var()`](https://neovim.io/doc/user/api.html#nvim_tabpage_get_var())
+    - [`vim.api.nvim_tabpage_del_var()`](https://neovim.io/doc/user/api.html#nvim_tabpage_del_var())
 - Vimの定義済み変数 (`v:`):
-    - `vim.api.nvim_set_vvar()`
-    - `vim.api.nvim_get_vvar()`
+    - [`vim.api.nvim_set_vvar()`](https://neovim.io/doc/user/api.html#nvim_set_vvar())
+    - [`vim.api.nvim_get_vvar()`](https://neovim.io/doc/user/api.html#nvim_get_vvar())
 
 Vimの定義済み変数を除いて、削除できます(Vim scriptの`:unlet`と同様です)。
 ローカル変数(`l:`)、スクリプト変数(`s:`)、関数の引数(`a:`)はVim script内でのみ意味があるため操作できません。
 Luaには独自のスコープルールがあります。
 
-これらの変数が不慣れな場合、`:h internal-variables`に説明があります。
+これらの変数が不慣れな場合、[`:help internal-variables`](https://neovim.io/doc/user/eval.html#internal-variables)に説明があります。
 
 これらの関数は対象の変数名と、設定したい値を含む文字列を受け取ります。
 
@@ -739,12 +740,12 @@ vim.api.nvim_buf_del_var(3, 'some_tabpage_variable')
 
 内部の変数はメタアクセサーを使用し、もっと直感的に操作できます。:
 
-- `vim.g.{name}`: グローバル変数
-- `vim.b.{name}`: バッファ変数
-- `vim.w.{name}`: ウィンドウ変数
-- `vim.t.{name}`: タブ変数
-- `vim.v.{name}`: Vimの定義済み変数
-- `vim.env.{name}`: 環境変数
+- [`vim.g.{name}`](https://neovim.io/doc/user/lua.html#vim.g): グローバル変数
+- [`vim.b.{name}`](https://neovim.io/doc/user/lua.html#vim.b): バッファ変数
+- [`vim.w.{name}`](https://neovim.io/doc/user/lua.html#vim.w): ウィンドウ変数
+- [`vim.t.{name}`](https://neovim.io/doc/user/lua.html#vim.t): タブ変数
+- [`vim.v.{name}`](https://neovim.io/doc/user/lua.html#vim.v): Vimの定義済み変数
+- [`vim.env.{name}`](https://neovim.io/doc/user/lua.html#vim.env): 環境変数
 
 ```lua
 vim.g.some_global_variable = {
@@ -763,6 +764,9 @@ print(vim.inspect(vim.g.some_global_variable)) -- { key1 = "value", key2 = 300 }
 ```lua
 vim.g.some_global_variable = nil
 ```
+
+参照:
+- [`:help lua-vim-variables`](https://neovim.io/doc/user/lua.html#lua-vim-variables)
 
 #### 警告
 
@@ -826,16 +830,16 @@ vim.fn['my#autoload#function']()
 `vim.api.nvim_call_function`は浮動小数点数のテーブルを返しLuaのクロージャーを受け入れませんが、`vim.fn`はこれらの型を扱えます。
 
 参照:
-- `:help vim.fn`
+- [`:help vim.fn`](https://neovim.io/doc/user/lua.html#vim.fn)
 
 #### Tips
 
 Neovimにはプラグインに便利な強力な組込み関数を含むライブラリがあります。
-アルファベット順のリストは`:help vim-function`を参照してください。
-`:help function-list`は機能別に分類されたリストです。
+アルファベット順のリストは[`:help vim-function`](https://neovim.io/doc/user/eval.html#vim-function)を参照してください。
+[`:help function-list`](https://neovim.io/doc/user/usr_41.html#function-list)は機能別に分類されたリストです。
 
 NeovimのAPI関数は`vim.api{..}`のように直接使用できます。
-詳細は`:help api`を参照してください。
+詳細は[`:help api`](https://neovim.io/doc/user/api.html#API)を参照してください。
 
 #### 警告
 
@@ -862,13 +866,13 @@ end
 Neovimはマッピングを設定、取得、削除するためのAPI関数を提供します。:
 
 - グローバルマッピング:
-    - `vim.api.nvim_set_keymap()`
-    - `vim.api.nvim_get_keymap()`
-    - `vim.api.nvim_del_keymap()`
+    - [`vim.api.nvim_set_keymap()`](https://neovim.io/doc/user/api.html#nvim_set_keymap())
+    - [`vim.api.nvim_get_keymap()`](https://neovim.io/doc/user/api.html#nvim_get_keymap())
+    - [`vim.api.nvim_del_keymap()`](https://neovim.io/doc/user/api.html#nvim_del_keymap())
 - バッファローカルマッピング:
-    - `vim.api.nvim_buf_set_keymap()`
-    - `vim.api.nvim_buf_get_keymap()`
-    - `vim.api.nvim_buf_del_keymap()`
+    - [`vim.api.nvim_buf_set_keymap()`](https://neovim.io/doc/user/api.html#nvim_buf_set_keymap())
+    - [`vim.api.nvim_buf_get_keymap()`](https://neovim.io/doc/user/api.html#nvim_buf_get_keymap())
+    - [`vim.api.nvim_buf_del_keymap()`](https://neovim.io/doc/user/api.html#nvim_buf_del_keymap())
 
 `vim.api.nvim_set_keymap()`と`vim.api.nvim_buf_set_keymap()`から始めましょう。
 
@@ -893,7 +897,7 @@ Neovimはマッピングを設定、取得、削除するためのAPI関数を�
 
 3つ目の引数は、右側のマッピングを含む文字列(実行するコマンド)です。
 
-最後の引数は、`:help :map-arguments`で定義されているbool型のオプションのテーブルです(`noremap`を含み、`buffer`を除く)。
+最後の引数は、[`:help :map-arguments`](https://neovim.io/doc/user/map.html#:map-arguments)で定義されているbool型のオプションのテーブルです(`noremap`を含み、`buffer`を除く)。
 
 バッファローカルなマッピングは、バッファ番号を引数の最初に受け取ります(`0`を指定した場合、カレントバッファです)。
 
@@ -941,6 +945,7 @@ vim.api.nvim_buf_del_keymap(0, 'i', '<Tab>')
 現在、Luaにはユーザーコマンドを作成するインターフェイスはありません。しかし、計画はあります。:
 
 - [Pull request #11613](https://github.com/neovim/neovim/pull/11613)
+- [Pull request #14661](https://github.com/neovim/neovim/pull/14661) (lua: autocmds take 2)
 
 いまのところ、Vim scriptでコマンドを作成したほうが良いです。
 
@@ -958,7 +963,7 @@ syntax APIはまだ作業中です。いくつかのポインターがありま�
 
 - [Issue #9876](https://github.com/neovim/neovim/issues/9876)
 - [tjdevries/colorbuddy.vim, a library for creating colorschemes in Lua](https://github.com/tjdevries/colorbuddy.vim)
-- `:help lua-treesitter`
+- [`:help lua-treesitter`](https://neovim.io/doc/user/treesitter.html#lua-treesitter)
 
 ## 一般的なTipsと推奨
 
@@ -1120,7 +1125,7 @@ globals = {
 - [teukka.tech - Using LibUV in Neovim](https://teukka.tech/posts/2020-01-07-vimloop/)
 
 参照:
-- `:help vim.loop`
+- [`:help vim.loop`](https://neovim.io/doc/user/lua.html#vim.loop)
 
 ### vim.lsp
 
@@ -1128,7 +1133,7 @@ globals = {
 [neovim/nvim-lspconfig](https://github.com/neovim/nvim-lspconfig/)は有名なLanguage Serverの設定集です。
 
 クライアントの動作は"lsp-handlers"を使用して設定できます。詳細はこちら:
-- `:help lsp-handler`
+- [`:help lsp-handler`](https://neovim.io/doc/user/lsp.html#lsp-handler)
 - [neovim/neovim#12655](https://github.com/neovim/neovim/pull/12655)
 - [How to migrate from diagnostic-nvim](https://github.com/nvim-lua/diagnostic-nvim/issues/73#issue-737897078)
 
@@ -1138,7 +1143,7 @@ LSPクライアントを利用したプラグインも見たいかもしれま�
 - [RishabhRD/nvim-lsputils](https://github.com/RishabhRD/nvim-lsputils)
 
 参照:
-- `:help lsp`
+- [`:help lsp`](https://neovim.io/doc/user/lsp.html#LSP)
 
 ### vim.treesitter
 
@@ -1148,7 +1153,7 @@ Tree-sitterについてもっと知りたいなら、この[プレゼン (38:37)
 [nvim-treesitter](https://github.com/nvim-treesitter/)オリジネーションは、ライブラリを利用して様々なプラグインをホストしています。
 
 参照:
-- `:help lua-treesitter`
+- [`:help lua-treesitter`](https://neovim.io/doc/user/treesitter.html#lua-treesitter)
 
 ### トランスパイラ
 
@@ -1161,7 +1166,7 @@ Luaを使用する利点の1つは実際にLuaを書く必要がないことで�
 
 - [Fennel](https://fennel-lang.org/)
 
-lispをLuaにコンパイルします。[Olical/aniseed](https://github.com/Olical/aniseed)を使用するとNeovimのプラグインと設定を書くことができます。
+lispをLuaにコンパイルします。[Olical/aniseed](https://github.com/Olical/aniseed)または、[Hotpot](https://github.com/rktjmp/hotpot.nvim)を使用するとNeovimのプラグインと設定を書くことができます。
 さらに、[Olical/conjure](https://github.com/Olical/conjure)は対話的な開発環境を提供します(他の言語の中で)。
 
 その他の興味深いプロジェクト:

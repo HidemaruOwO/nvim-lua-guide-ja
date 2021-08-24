@@ -1138,9 +1138,7 @@ globals = {
 - [How to migrate from diagnostic-nvim](https://github.com/nvim-lua/diagnostic-nvim/issues/73#issue-737897078)
 
 
-LSPクライアントを利用したプラグインも見たいかもしれません。:
-- [nvim-lua/completion-nvim](https://github.com/nvim-lua/completion-nvim)
-- [RishabhRD/nvim-lsputils](https://github.com/RishabhRD/nvim-lsputils)
+LSPクライアントを利用した[プラグイン](https://github.com/rockerBOO/awesome-neovim#lsp)も見たいかもしれません。
 
 参照:
 - [`:help lsp`](https://neovim.io/doc/user/lsp.html#LSP)

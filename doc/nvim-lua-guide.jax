@@ -1282,8 +1282,7 @@ https://github.com/nvim-lua/diagnostic-nvim/issues/73#issue-737897078
 
 
 LSPクライアントを利用したプラグインも見たいかもしれません。:
--  nvim-lua/completion-nvim: https://github.com/nvim-lua/completion-nvim
--  RishabhRD/nvim-lsputils: https://github.com/RishabhRD/nvim-lsputils
+https://github.com/rockerBOO/awesome-neovim#lsp
 
 参照:
 - |lsp|

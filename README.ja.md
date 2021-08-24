@@ -31,6 +31,9 @@ Luaでプラグインを書くためのチュートリアルが既にいくつ�
 - [dev.to - プラグインのUIをLuaで作る方法](https://dev.to/2nit/how-to-make-ui-for-neovim-plugins-in-lua-3b6e)
 - [ms-jpq - Neovim Async Tutorial](https://github.com/ms-jpq/neovim-async-tutorial)
 - [oroques.dev - Neovim 0.5の機能とinit.luaへの切り替え](https://oroques.dev/notes/neovim-init/)
+- [ゼロからステータスラインを作る - jdhao's blog](https://jdhao.github.io/2019/11/03/vim_custom_statusline/)
+- [LuaでNeovimを設定する](https://icyphox.sh/blog/nvim-lua/)
+- [Devlog | Luaで設定するために知る必要のあること](https://vonheikemen.github.io/devlog/tools/configuring-neovim-using-lua/)
 
 ### 関連するプラグイン
 

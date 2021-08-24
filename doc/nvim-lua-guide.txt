@@ -61,6 +61,11 @@ https://dev.to/2nit/how-to-make-ui-for-neovim-plugins-in-lua-3b6e
 https://github.com/ms-jpq/neovim-async-tutorial
 -  oroques.dev - Neovim 0.5 features and the switch to init.lua:
 https://oroques.dev/notes/neovim-init/
+-  Building A Vim Statusline from Scratch - jdhao's blog:
+https://jdhao.github.io/2019/11/03/vim_custom_statusline/
+-  Configuring Neovim using Lua: https://icyphox.sh/blog/nvim-lua/
+-  Devlog | Everything you need to know to configure neovim using lua:
+https://vonheikemen.github.io/devlog/tools/configuring-neovim-using-lua/
 
 Companion plugins~
 
@@ -484,8 +489,8 @@ remote plugins)
 - `vim.treesitter`: module that exposes the functionality of the
 tree-sitter library
 
-This list is by no means comprehensive. If you wish to know more about what's
-made available by the `vim` variable, |lua-stdlib| and |lua-vim| to get a list
+This list is by no means comprehensive. If you wish to know more about
+what's made available by the `vim` variable, |lua-stdlib|` to get a list
 of every module.
 
 Tips~
@@ -992,9 +997,9 @@ See also:
 
 Tips~
 
-Neovim has an extensive library of powerful built-in functions that are very
-useful for plugins. See |vim-function| for an alphabetical list and
-|function-list| for a list of functions grouped by topic.
+Neovim has an extensive library of powerful built-in functions that
+are very useful for plugins. See |vim-function| for a list of functions
+grouped by topic.
 
 Neovim API functions can be used directly through `vim.api.{..}`. See
 |api| for information.

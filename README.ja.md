@@ -54,7 +54,7 @@ Luaでプラグインを書くためのチュートリアルが既にいくつ�
 
 Neovimは、`init.vim`の代わりに設定ファイルとして`init.lua`を読み込むことをサポートしています。
 
-Note: `init.lua`は*完全に*オプションです。`init.vim`は廃止されず、設定として有効です。
+Note: `init.lua`は_完全に_オプションです。`init.vim`は廃止されず、設定として有効です。
 いくつかの機能は、まだ100%Luaに公開されていないので注意してください。
 
 参照:
@@ -482,7 +482,7 @@ true)
 print(result) -- 'hello world'
 ```
 
-**TODO**: The docs say that script-scope (`s:`) is supported, but running this snippet with a script-scoped variable throws an error. Why?
+**TODO**: the docs say that script-scope (`s:`) is supported, but running this snippet with a script-scoped variable throws an error. Why?
 
 ### vim.api.nvim_command()
 

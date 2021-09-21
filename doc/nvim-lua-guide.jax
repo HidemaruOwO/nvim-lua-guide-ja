@@ -84,7 +84,7 @@ init.lua~
 
 Neovimは、`init.vim`の代わりに設定ファイルとして`init.lua`を読み込むことをサポートしています。
 
-Note: `init.lua`は*完全に*オプションです。`init.vim`は廃止されず、設定として有効です。
+Note: `init.lua`は_完全に_オプションです。`init.vim`は廃止されず、設定として有効です。
 いくつかの機能は、まだ100%Luaに公開されていないので注意してください。
 
 参照:
@@ -535,8 +535,8 @@ scriptの型は自動的にLuaの型に変換されます。(その逆も同様�
     print(vim.api.nvim_eval('v:null')) -- nil
 <
 
-	*Todo	tasks: is it possible for `vim.api.nvim_eval()` to return
-	a `funcref`?
+	*Todo	is it possible for `vim.api.nvim_eval()` to return a
+	`funcref`?
 
 警告~
 
@@ -563,7 +563,7 @@ scriptのチャンクを実行します。実行するソースコートを含�
     print(result) -- 'hello world'
 <
 
-	*Todo	tasks: The docs say that script-scope (`s:`) is supported,
+	*Todo	the docs say that script-scope (`s:`) is supported,
 	but running this snippet with a script-scoped variable throws
 	an error. Why?
 

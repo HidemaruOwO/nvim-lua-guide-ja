@@ -992,6 +992,16 @@ require('modname') -- 新しい'modname'モジュールを読み込みます
 
 [nvim-lua/plenary.nvim](https://github.com/nvim-lua/plenary.nvim)には、これを行う[関数](https://github.com/nvim-lua/plenary.nvim/blob/master/lua/plenary/reload.lua)があります。
 
+### Luaの文字列をパディングしないでください!
+
+二重括弧の文字列を使用するとき、パディングの誘惑に負けないでください! スペースを無視するときは問題ないですが、スペースが重要な意味を持つときはデバックが困難な問題の原因になる可能性があります。:
+
+```lua
+vim.api.nvim_set_keymap('n', '<Leader>f', [[ <Cmd>call foo()<CR> ]], {noremap = true})
+```
+
+上記の例では、`<Leader>f`は`<Cmd>call foo()<CR>`ではなく`<Space><Cmd>call foo()<CR><Space>`にマッピングされます。
+
 ### Vim script <--> Lua 型変換の注意
 
 #### 変数を変換するとコピーが作られます:

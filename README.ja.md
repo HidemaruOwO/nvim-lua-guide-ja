@@ -54,7 +54,7 @@ Luaでプラグインを書くためのチュートリアルが既にいくつ�
 
 Neovimは、`init.vim`の代わりに設定ファイルとして`init.lua`を読み込むことをサポートしています。
 
-Note: `init.lua`は*完全に*オプションです。`init.vim`は廃止されず、設定として有効です。
+Note: `init.lua`は_完全に_オプションです。`init.vim`は廃止されず、設定として有効です。
 いくつかの機能は、まだ100%Luaに公開されていないので注意してください。
 
 参照:
@@ -482,7 +482,7 @@ true)
 print(result) -- 'hello world'
 ```
 
-**TODO**: The docs say that script-scope (`s:`) is supported, but running this snippet with a script-scoped variable throws an error. Why?
+**TODO**: the docs say that script-scope (`s:`) is supported, but running this snippet with a script-scoped variable throws an error. Why?
 
 ### vim.api.nvim_command()
 
@@ -518,7 +518,7 @@ EOF
 vim.cmd('%s/\\Vfoo/bar/g')
 ```
 
-文字列リテラルはエスケープが必要ないため使いやすいです。:
+二重括弧の文字列はエスケープが必要ないため使いやすいです。:
 
 ```lua
 vim.cmd([[%s/\Vfoo/bar/g]])
@@ -991,6 +991,16 @@ require('modname') -- 新しい'modname'モジュールを読み込みます
 ```
 
 [nvim-lua/plenary.nvim](https://github.com/nvim-lua/plenary.nvim)には、これを行う[関数](https://github.com/nvim-lua/plenary.nvim/blob/master/lua/plenary/reload.lua)があります。
+
+### Luaの文字列をパディングしないでください!
+
+二重括弧の文字列を使用するとき、パディングの誘惑に負けないでください! スペースを無視するときは問題ないですが、スペースが重要な意味を持つときはデバックが困難な問題の原因になる可能性があります。:
+
+```lua
+vim.api.nvim_set_keymap('n', '<Leader>f', [[ <Cmd>call foo()<CR> ]], {noremap = true})
+```
+
+上記の例では、`<Leader>f`は`<Cmd>call foo()<CR>`ではなく`<Space><Cmd>call foo()<CR><Space>`にマッピングされます。
 
 ### Vim script <--> Lua 型変換の注意
 

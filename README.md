@@ -62,7 +62,7 @@ A few tutorials have already been written to help people write plugins in Lua. S
 
 Neovim supports loading an `init.lua` file for configuration instead of the usual `init.vim`.
 
-Note: `init.lua` is of course *completely* optional. Support for `init.vim` is not going away and is still a valid option for configuration. Do keep in mind that some features are not 100% exposed to Lua yet.
+Note: `init.lua` is of course _completely_ optional. Support for `init.vim` is not going away and is still a valid option for configuration. Do keep in mind that some features are not 100% exposed to Lua yet.
 
 See also:
 - [`:help config`](https://neovim.io/doc/user/starting.html#config)
@@ -475,7 +475,7 @@ true)
 print(result) -- 'hello world'
 ```
 
-**TODO**: The docs say that script-scope (`s:`) is supported, but running this snippet with a script-scoped variable throws an error. Why?
+**TODO**: the docs say that script-scope (`s:`) is supported, but running this snippet with a script-scoped variable throws an error. Why?
 
 ### vim.api.nvim_command()
 
@@ -495,11 +495,13 @@ Alias for `vim.api.nvim_exec()`. Only the command argument is needed, `output` i
 ```lua
 vim.cmd('buffers')
 vim.cmd([[
-let g:multiline =<< EOF
-foo
-bar
-baz
-EOF
+let g:multiline_list = [
+            \ 1,
+            \ 2,
+            \ 3,
+            \ ]
+
+echo g:multiline_list
 ]])
 ```
 
@@ -511,7 +513,7 @@ Since you have to pass strings to these functions, you often end up having to es
 vim.cmd('%s/\\Vfoo/bar/g')
 ```
 
-Literal strings are easier to use as they do not require escaping characters:
+Double bracketed strings are easier to use as they do not require escaping characters:
 
 ```lua
 vim.cmd([[%s/\Vfoo/bar/g]])
@@ -971,6 +973,16 @@ require('modname') -- loads an updated version of module 'modname'
 ```
 
 The [nvim-lua/plenary.nvim](https://github.com/nvim-lua/plenary.nvim) plugin has a [custom function](https://github.com/nvim-lua/plenary.nvim/blob/master/lua/plenary/reload.lua) that does this for you.
+
+### Don't pad Lua strings!
+
+When using double bracketed strings, resist the temptation to pad them! While it is fine to do in contexts where spaces are ignored, it can cause hard to debug issues when whitespace is significant:
+
+```lua
+vim.api.nvim_set_keymap('n', '<Leader>f', [[ <Cmd>call foo()<CR> ]], {noremap = true})
+```
+
+In the above example, `<Leader>f` is mapped to `<Space><Cmd>call foo()<CR><Space>` instead of `<Cmd>call foo()<CR>`.
 
 ### Notes about Vimscript <-> Lua type conversion
 

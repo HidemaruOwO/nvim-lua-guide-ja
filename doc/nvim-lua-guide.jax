@@ -535,9 +535,6 @@ scriptの型は自動的にLuaの型に変換されます。(その逆も同様�
     print(vim.api.nvim_eval('v:null')) -- nil
 <
 
-	*Todo	is it possible for `vim.api.nvim_eval()` to return a
-	`funcref`?
-
 警告~
 
 `luaeval()`と違い、式にデータを渡すための暗黙的な変数`_A`を提供しません。
@@ -550,22 +547,18 @@ scriptのチャンクを実行します。実行するソースコートを含�
     >
     local result = vim.api.nvim_exec(
     [[
-    let mytext = 'hello world'
+    let s:mytext = 'hello world'
 
-    function! MyFunction(text)
+    function! s:MyFunction(text)
 	echo a:text
     endfunction
 
-    call MyFunction(mytext)
+    call MyFunction(s:mytext)
     ]],
     true)
 
     print(result) -- 'hello world'
 <
-
-	*Todo	the docs say that script-scope (`s:`) is supported,
-	but running this snippet with a script-scoped variable throws
-	an error. Why?
 
 vim.api.nvim_command()~
 

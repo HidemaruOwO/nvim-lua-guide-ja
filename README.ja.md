@@ -456,8 +456,6 @@ print(vim.api.nvim_eval('v:true')) -- true
 print(vim.api.nvim_eval('v:null')) -- nil
 ```
 
-**TODO**: is it possible for `vim.api.nvim_eval()` to return a `funcref`?
-
 #### 警告
 
 `luaeval()`と違い、式にデータを渡すための暗黙的な変数`_A`を提供しません。
@@ -469,20 +467,18 @@ Vim scriptのチャンクを実行します。実行するソースコートを�
 ```lua
 local result = vim.api.nvim_exec(
 [[
-let mytext = 'hello world'
+let s:mytext = 'hello world'
 
-function! MyFunction(text)
+function! s:MyFunction(text)
     echo a:text
 endfunction
 
-call MyFunction(mytext)
+call s:MyFunction(mytext)
 ]],
 true)
 
 print(result) -- 'hello world'
 ```
-
-**TODO**: the docs say that script-scope (`s:`) is supported, but running this snippet with a script-scoped variable throws an error. Why?
 
 ### vim.api.nvim_command()
 

@@ -285,7 +285,7 @@ echo list[0]
 " 1
 echo list[1]
 " 2
-" 注意 Luaのテーブルと違い、Vimのリストは0インデックスです。 
+" 注意 Luaのテーブルと違い、Vimのリストは0インデックスです。
 
 " 辞書のようなテーブルはVimの辞書に変換されます。
 let dict = luaeval('{foo = "bar", baz = "qux"}')

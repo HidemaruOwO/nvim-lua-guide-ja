@@ -761,6 +761,9 @@ vim.g.some_global_variable = {
 }
 
 print(vim.inspect(vim.g.some_global_variable)) -- { key1 = "value", key2 = 300 }
+
+-- 特定のバッファ/ウィンドウ/タブを対象とします(Neovim 0.6+)
+vim.b[2].myvar = 1
 ```
 
 一部の変数名には、Luaの識別子に使用できない文字が含まれている場合があります。
@@ -777,9 +780,8 @@ vim.g.some_global_variable = nil
 
 #### 警告
 
-オプションのメタアクセサーと違い、バッファ/ウィンドウ/タブの変数に番号を指定できません。
 
-さらに、辞書の1つのキーを追加/更新/削除できません。例えば、次のVim scriptは期待通りに動きません。:
+辞書の1つのキーを追加/更新/削除できません。例えば、次のVim scriptは期待通りに動きません。:
 
 ```vim
 let g:variable = {}

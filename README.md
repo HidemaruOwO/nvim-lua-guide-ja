@@ -449,8 +449,6 @@ print(vim.api.nvim_eval('v:true')) -- true
 print(vim.api.nvim_eval('v:null')) -- nil
 ```
 
-**TODO**: is it possible for `vim.api.nvim_eval()` to return a `funcref`?
-
 #### Caveats
 
 Unlike `luaeval()`, `vim.api.nvim_eval()` does not provide an implicit `_A` variable to pass data to the expression.
@@ -462,20 +460,18 @@ This function evaluates a chunk of Vimscript code. It takes in a string containi
 ```lua
 local result = vim.api.nvim_exec(
 [[
-let mytext = 'hello world'
+let s:mytext = 'hello world'
 
-function! MyFunction(text)
+function! s:MyFunction(text)
     echo a:text
 endfunction
 
-call MyFunction(mytext)
+call s:MyFunction(s:mytext)
 ]],
 true)
 
 print(result) -- 'hello world'
 ```
-
-**TODO**: the docs say that script-scope (`s:`) is supported, but running this snippet with a script-scoped variable throws an error. Why?
 
 ### vim.api.nvim_command()
 
@@ -758,6 +754,9 @@ vim.g.some_global_variable = {
 }
 
 print(vim.inspect(vim.g.some_global_variable)) -- { key1 = "value", key2 = 300 }
+
+-- target a specific buffer/window/tabpage (Neovim 0.6+)
+vim.b[2].myvar = 1
 ```
 
 Some variable names may contain characters that cannot be used for identifiers in Lua. You can still manipulate these variables by using this syntax: `vim.g['my#variable']`.
@@ -773,9 +772,7 @@ See also:
 
 #### Caveats
 
-Unlike options meta-accessors, you cannot specify a number for buffer/window/tabpage-scoped variables.
-
-Additionally, you cannot add/update/delete keys from a dictionary stored in one of these variables. For example, this snippet of Vimscript code does not work as expected:
+You cannot add/update/delete keys from a dictionary stored in one of these variables. For example, this snippet of Vimscript code does not work as expected:
 
 ```vim
 let g:variable = {}

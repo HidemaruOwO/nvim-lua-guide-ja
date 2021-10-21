@@ -285,7 +285,7 @@ echo list[0]
 " 1
 echo list[1]
 " 2
-" 注意 Luaのテーブルと違い、Vimのリストは0インデックスです。 
+" 注意 Luaのテーブルと違い、Vimのリストは0インデックスです。
 
 " 辞書のようなテーブルはVimの辞書に変換されます。
 let dict = luaeval('{foo = "bar", baz = "qux"}')
@@ -456,8 +456,6 @@ print(vim.api.nvim_eval('v:true')) -- true
 print(vim.api.nvim_eval('v:null')) -- nil
 ```
 
-**TODO**: is it possible for `vim.api.nvim_eval()` to return a `funcref`?
-
 #### 警告
 
 `luaeval()`と違い、式にデータを渡すための暗黙的な変数`_A`を提供しません。
@@ -469,20 +467,18 @@ Vim scriptのチャンクを実行します。実行するソースコートを�
 ```lua
 local result = vim.api.nvim_exec(
 [[
-let mytext = 'hello world'
+let s:mytext = 'hello world'
 
-function! MyFunction(text)
+function! s:MyFunction(text)
     echo a:text
 endfunction
 
-call MyFunction(mytext)
+call s:MyFunction(mytext)
 ]],
 true)
 
 print(result) -- 'hello world'
 ```
-
-**TODO**: the docs say that script-scope (`s:`) is supported, but running this snippet with a script-scoped variable throws an error. Why?
 
 ### vim.api.nvim_command()
 
@@ -765,6 +761,9 @@ vim.g.some_global_variable = {
 }
 
 print(vim.inspect(vim.g.some_global_variable)) -- { key1 = "value", key2 = 300 }
+
+-- 特定のバッファ/ウィンドウ/タブを対象とします(Neovim 0.6+)
+vim.b[2].myvar = 1
 ```
 
 一部の変数名には、Luaの識別子に使用できない文字が含まれている場合があります。
@@ -781,9 +780,8 @@ vim.g.some_global_variable = nil
 
 #### 警告
 
-オプションのメタアクセサーと違い、バッファ/ウィンドウ/タブの変数に番号を指定できません。
 
-さらに、辞書の1つのキーを追加/更新/削除できません。例えば、次のVim scriptは期待通りに動きません。:
+辞書の1つのキーを追加/更新/削除できません。例えば、次のVim scriptは期待通りに動きません。:
 
 ```vim
 let g:variable = {}

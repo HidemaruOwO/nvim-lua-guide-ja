@@ -365,6 +365,9 @@ inoremap <silent> <expr> <Tab>
     \ pumvisible() ? "\<C-n>" :
     \ v:lua.check_back_space() ? "\<Tab>" :
     \ completion#trigger_completion()
+
+" シングルクォートを使用したり、括弧を省略して、Luaモジュールから関数を呼び出します:
+call v:lua.require'module'.foo()
 ```
 
 参照:

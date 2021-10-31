@@ -335,8 +335,7 @@ scriptの型に変換されます。(その逆も同様です。)
     echo concat
     " 'Lua is awesome'
 
-    "
-    リストのようなテーブルはVimのリストに変換されます。
+    " リストのようなテーブルはVimのリストに変換されます。
     let list = luaeval('{1, 2, 3, 4}')
     echo list[0]
     " 1
@@ -345,8 +344,7 @@ scriptの型に変換されます。(その逆も同様です。)
     " 注意
     Luaのテーブルと違い、Vimのリストは0インデックスです。
 
-    "
-    辞書のようなテーブルはVimの辞書に変換されます。
+    " 辞書のようなテーブルはVimの辞書に変換されます。
     let dict = luaeval('{foo = "bar", baz = "qux"}')
     echo dict.foo
     " 'bar'
@@ -365,8 +363,7 @@ scriptの型に変換されます。(その逆も同様です。)
     let LuaModuleFunction = luaeval('require("mymodule").myfunction')
     call LuaModuleFunction()
 
-    "
-    Vimの関数にLuaの関数を値として渡すこともできます。
+    " Vimの関数にLuaの関数を値として渡すこともできます。
     lua X = function(k, v) return string.format("%s:%s", k, v) end
     echo map([1, 2, 3], luaeval("X"))
 <

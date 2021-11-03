@@ -1113,7 +1113,7 @@ globals = {
 
 [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig/)リポジトリに[sumneko/lua-language-serverの設定方法](https://github.com/neovim/nvim-lspconfig/blob/master/CONFIG.md#sumneko_lua)があります（例は組込みのLSPクライアントを使っていますが、他のLSPクライアントでも同じ設定である必要があります）。
 
-[sumneko/lua-language-server](https://github.com/sumneko/lua-language-server/)の設定方法の詳細は["Setting without VSCode"](https://github.com/sumneko/lua-language-server/wiki/Setting-without-VSCode)を見てください。
+[sumneko/lua-language-server](https://github.com/sumneko/lua-language-server/)の設定方法の詳細は["Setting"](https://github.com/sumneko/lua-language-server/wiki/Setting)を見てください。
 
 #### coc.nvim
 

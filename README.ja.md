@@ -483,6 +483,10 @@ true)
 print(result) -- 'hello world'
 ```
 
+#### 警告
+
+Neovim 0.6.0より前のバージョンでは 、`nvim_exec` はスクリプトローカル変数(`s:`)をサポートしていません。
+
 ### vim.api.nvim_command()
 
 Exコマンドを実行します。実行するコマンドを含む文字列を受け取ります。

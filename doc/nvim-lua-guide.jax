@@ -560,6 +560,9 @@ scriptのチャンクを実行します。実行するソースコートを含�
 
     print(result) -- 'hello world'
 <
+警告
+
+Neovim 0.6.0より前のバージョンでは 、`nvim_exec` はスクリプトローカル変数(`s:`)をサポートしていません。
 
 vim.api.nvim_command()~
 

@@ -491,8 +491,8 @@ Tips~
     function _G.put(...)
       local objects = {}
       for i = 1, select('#', ...) do
-	local v = select(i, ...)
-	table.insert(objects, vim.inspect(v))
+        local v = select(i, ...)
+        table.insert(objects, vim.inspect(v))
       end
 
       print(table.concat(objects, '\n'))
@@ -551,7 +551,7 @@ scriptのチャンクを実行します。実行するソースコートを含�
     let s:mytext = 'hello world'
 
     function! s:MyFunction(text)
-	echo a:text
+        echo a:text
     endfunction
 
     call MyFunction(s:mytext)
@@ -621,7 +621,7 @@ vim.api.nvim_replace_termcodes()~
 
     >
     function _G.smart_tab()
-	return vim.fn.pumvisible() == 1 and [[\<C-n>]] or [[\<Tab>]]
+        return vim.fn.pumvisible() == 1 and [[\<C-n>]] or [[\<Tab>]]
     end
 
     vim.api.nvim_set_keymap('i', '<Tab>', 'v:lua.smart_tab()', {expr =
@@ -649,8 +649,8 @@ Luaにはそのような機能は組み込まれていません。
     -- `termcodes` 専用の `t` 関数です
     -- この名前で呼ばなくてもいいですが、この簡潔さが便利です
     local function t(str)
-	-- 必要に応じてboolean引数で調整します
-	return vim.api.nvim_replace_termcodes(str, true, true, true)
+        -- 必要に応じてboolean引数で調整します
+        return vim.api.nvim_replace_termcodes(str, true, true, true)
     end
 
     print(t'<Tab>')
@@ -660,11 +660,11 @@ Luaにはそのような機能は組み込まれていません。
 
     >
     local function t(str)
-	return vim.api.nvim_replace_termcodes(str, true, true, true)
+        return vim.api.nvim_replace_termcodes(str, true, true, true)
     end
 
     function _G.smart_tab()
-	return vim.fn.pumvisible() == 1 and t'<C-n>' or t'<Tab>'
+        return vim.fn.pumvisible() == 1 and t'<C-n>' or t'<Tab>'
     end
 
     vim.api.nvim_set_keymap('i', '<Tab>', 'v:lua.smart_tab()', {expr =
@@ -866,8 +866,8 @@ internal-variables`に説明があります。
 
     >
     vim.g.some_global_variable = {
-	key1 = 'value',
-	key2 = 300
+        key1 = 'value',
+        key2 = 300
     }
 
     print(vim.inspect(vim.g.some_global_variable)) -- { key1 = "value",
@@ -931,7 +931,7 @@ vim.fn.{function}()~
     print(vim.inspect(reversed_list)) -- { "c", "b", "a" }
 
     local function print_stdout(chan_id, data, name)
-	print(data[1])
+        print(data[1])
     end
 
     vim.fn.jobstart('ls', { on_stdout = print_stdout })
@@ -968,7 +968,7 @@ scriptでは`1`は真で`0`は偽になるため問題ありません。
 
     >
     if has('nvim')
-	" do something...
+        " do something...
     endif
 <
 
@@ -977,7 +977,7 @@ scriptでは`1`は真で`0`は偽になるため問題ありません。
 
     >
     if vim.fn.has('nvim') == 1 then
-	-- do something...
+        -- do something...
     end
 <
 
@@ -1194,9 +1194,9 @@ Luaの関数をVimの関数に渡せますが、Vimの変数に格納できま�
     >
     -- This works:
     vim.fn.jobstart({'ls'}, {
-	on_stdout = function(chan_id, data, name)
-	    print(vim.inspect(data))
-	end
+        on_stdout = function(chan_id, data, name)
+            print(vim.inspect(data))
+        end
     })
 
     -- This doesn't:

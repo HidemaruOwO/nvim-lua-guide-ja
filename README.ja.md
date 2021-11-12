@@ -505,11 +505,13 @@ vim.api.nvim_command('%s/foo/bar/g')
 ```lua
 vim.cmd('buffers')
 vim.cmd([[
-let g:multiline =<< EOF
-foo
-bar
-baz
-EOF
+let g:multiline_list = [
+            \ 1,
+            \ 2,
+            \ 3,
+            \ ]
+
+echo g:multiline_list
 ]])
 ```
 
@@ -1115,7 +1117,7 @@ globals = {
 
 #### sumneko/lua-language-server
 
-[nvim-lspconfig](https://github.com/neovim/nvim-lspconfig/)リポジトリに[sumneko/lua-language-serverの設定方法](https://github.com/neovim/nvim-lspconfig/blob/master/CONFIG.md#sumneko_lua)があります（例は組込みのLSPクライアントを使っていますが、他のLSPクライアントでも同じ設定である必要があります）。
+[nvim-lspconfig](https://github.com/neovim/nvim-lspconfig/)リポジトリに[sumneko/lua-language-serverの設定方法](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#sumneko_lua)があります（例は組込みのLSPクライアントを使っていますが、他のLSPクライアントでも同じ設定である必要があります）。
 
 [sumneko/lua-language-server](https://github.com/sumneko/lua-language-server/)の設定方法の詳細は["Setting"](https://github.com/sumneko/lua-language-server/wiki/Setting)を見てください。
 

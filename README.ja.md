@@ -441,7 +441,7 @@ put({1, 2, 3})
 
 または、`:lua`コマンドでLua式の前に `=` をつけて、整列させて表示できます。(Neovim 0.7+のみ)
 
-```lua
+```vim
 :lua =vim.loop
 ```
 
@@ -1030,6 +1030,8 @@ echo s:list
 " [2, 4, 6]
 echo s:newlist
 " [2, 4, 6]
+echo s:list is# s:newlist
+" 1
 ```
 
 Luaからこの関数を使用すると、代りにコピーが作られます
@@ -1040,6 +1042,7 @@ local newtbl = vim.fn.map(tbl, function(_, v) return v * 2 end)
 
 print(vim.inspect(tbl)) -- { 1, 2, 3 }
 print(vim.inspect(newtbl)) -- { 2, 4, 6 }
+print(tbl == newtbl) -- false
 ```
 
 #### 変換を常にできるとは限りません
@@ -1066,6 +1069,7 @@ print(vim.inspect(vim.g.test_dict)) -- {}
 ```
 
 Luaの関数をVimの関数に渡せますが、Vimの変数に格納できません。
+(Neovim 0.7.0+で修正されて、格納できるようになりました。)
 
 ```lua
 -- This works:

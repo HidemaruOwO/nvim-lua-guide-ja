@@ -966,12 +966,16 @@ vim.api.nvim_buf_del_keymap(0, 'i', '<Tab>')
 
 ## ユーザーコマンドを定義する
 
-現在、Luaにはユーザーコマンドを作成するインターフェイスはありません。しかし、計画はあります。:
+ユーザーコマンドを作成するインターフェイスは、次のPRで実装されました。現在、Neovim 0.7+ (nightly)のみで使用できます:
 
-- [Pull request #11613](https://github.com/neovim/neovim/pull/11613)
-- [Pull request #14661](https://github.com/neovim/neovim/pull/14661) (lua: autocmds take 2)
+- [Pull request #16752](https://github.com/neovim/neovim/pull/16752)
 
-いまのところ、Vim scriptでコマンドを作成したほうが良いです。
+- Global user command:
+  - [`nvim_add_user_command()`](https://neovim.io/doc/user/api.html#nvim_add_user_command())
+  - [`nvim_del_user_command()`](https://neovim.io/doc/user/api.html#nvim_del_user_command())
+- Buffer-local user commands:
+  - [`nvim_buf_add_user_command()`](https://neovim.io/doc/user/api.html#nvim_buf_add_user_command())
+  - [`nvim_buf_del_user_command()`](https://neovim.io/doc/user/api.html#nvim_buf_del_user_command())
 
 ## autocommandを定義する
 

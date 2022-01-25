@@ -944,11 +944,16 @@ vim.api.nvim_buf_del_keymap(0, 'i', '<Tab>')
 
 ## Defining user commands
 
-There is currently no interface to create user commands in Lua. It is planned, though:
+The interface to create user commands was implemented in the PR below and is currently available only in neovim 0.7+ (nightly):
 
-- [Pull request #11613](https://github.com/neovim/neovim/pull/11613)
+- [Pull request #16752](https://github.com/neovim/neovim/pull/16752)
 
-For the time being, you're probably better off creating commands in Vimscript.
+- Global user command:
+  - [`nvim_add_user_command()`](https://neovim.io/doc/user/api.html#nvim_add_user_command())
+  - [`nvim_del_user_command()`](https://neovim.io/doc/user/api.html#nvim_del_user_command())
+- Buffer-local user commands:
+  - [`nvim_buf_add_user_command()`](https://neovim.io/doc/user/api.html#nvim_buf_add_user_command())
+  - [`nvim_buf_del_user_command()`](https://neovim.io/doc/user/api.html#nvim_buf_del_user_command())
 
 ## Defining autocommands
 

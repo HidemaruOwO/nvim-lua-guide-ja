@@ -1078,12 +1078,16 @@ Neovimはマッピングを設定、取得、削除するためのAPI関数を�
 ユーザーコマンドを定義する
                                                *luaguide-defining-user-commands*
 
-現在、Luaにはユーザーコマンドを作成するインターフェイスはありません。しかし、計画はあります。:
+ユーザーコマンドを作成するインターフェイスは、次のPRで実装されました。現在、Neovim 0.7+ (nightly)のみで使用できます:
 
 -  Pull request #11613: https://github.com/neovim/neovim/pull/11613
 
-いまのところ、Vim
-scriptでコマンドを作成したほうが良いです。
+- Global user command:
+  - [`nvim_add_user_command()`](https://neovim.io/doc/user/api.html#nvim_add_user_command())
+  - [`nvim_del_user_command()`](https://neovim.io/doc/user/api.html#nvim_del_user_command())
+- Buffer-local user commands:
+  - [`nvim_buf_add_user_command()`](https://neovim.io/doc/user/api.html#nvim_buf_add_user_command())
+  - [`nvim_buf_del_user_command()`](https://neovim.io/doc/user/api.html#nvim_buf_del_user_command())
 
 ==============================================================================
 autocommandを定義する

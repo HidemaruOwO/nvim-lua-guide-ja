@@ -28,7 +28,7 @@ LuaScript tutorial: https://www.luascript.dev/learn を試してみてくださ�
 -  official reference manual for Lua: https://www.lua.org/manual/5.1/
 には最も包括的な情報があります。
 エディタで快適に読みたいなら、Vimdocプラグインがあります。:
-wsdjeg/luarefvim: https://github.com/wsdjeg/luarefvim
+milisims/nvim-luaref: https://github.com/milisims/nvim-luaref
 
 Luaはとてもクリーンでシンプルな言語であることに注意してください。
 JavaScriptのようなスクリプト言語の経験があれば、学ぶことは簡単です。

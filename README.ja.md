@@ -18,7 +18,7 @@ Neovimの[ファーストクラス言語](https://github.com/neovim/neovim/wiki/
 - 動画が好きなら、Derek Banasの動画があります。[1-hour tutorial on the language](https://www.youtube.com/watch?v=iMacxZQMPXs)
 - 実行できるサンプルを使い、対話的に学びたいですか？[LuaScript tutorial](https://www.luascript.dev/learn)を試してみてください。
 - [lua-users wiki](http://lua-users.org/wiki/LuaDirectory)にはLua関連のトピックごとの便利な情報がたくさんあります。
-- [official reference manual for Lua](https://www.lua.org/manual/5.1/)には最も包括的な情報があります。(エディタで快適に読みたいなら、Vimdocプラグインがあります。:[wsdjeg/luarefvim](https://github.com/wsdjeg/luarefvim))
+- [official reference manual for Lua](https://www.lua.org/manual/5.1/)には最も包括的な情報があります。(エディタで快適に読みたいなら、Vimdocプラグインがあります。:[milisims/nvim-luaref](https://github.com/milisims/nvim-luaref))
 
 Luaはとてもクリーンでシンプルな言語であることに注意してください。JavaScriptのようなスクリプト言語の経験があれば、学ぶことは簡単です。あなたはもう自分で思っているよりLuaについて知っているかもしれません！
 

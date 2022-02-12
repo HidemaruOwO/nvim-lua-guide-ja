@@ -414,7 +414,7 @@ API関数は、[`:help api-global`](https://neovim.io/doc/user/api.html#api-glob
 
 #### Tips
 
-オブジェクトの中身を検査するのに毎回`print(vim.inspect(x)`を書くのは面倒です。設定にグローバルなラッパー関数を含めることは価値があるかもしれません。:
+オブジェクトの中身を検査するのに毎回`print(vim.inspect(x)`を書くのは面倒です。設定にグローバルなラッパー関数を含めることは価値があるかもしれません。(Neovim 0.7.0+では、この関数は組込み関数です。参照 [`:help vim.pretty_print()`](https://neovim.io/doc/user/lua.html#vim.pretty_print())):
 
 ```lua
 function _G.put(...)

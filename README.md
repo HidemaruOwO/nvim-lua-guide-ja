@@ -396,9 +396,10 @@ Neovim exposes a global `vim` variable which serves as an entry point to interac
 
 Some notable functions and modules include:
 
-- `vim.inspect`: pretty-print Lua objects (useful for inspecting tables)
+- `vim.inspect`: transform Lua objects into human-readable strings (useful for inspecting tables)
 - `vim.regex`: use Vim regexes from Lua
 - `vim.api`: module that exposes API functions (the same API used by remote plugins)
+- `vim.ui`: overridable UI functions that can be leveraged by plugins
 - `vim.loop`: module that exposes the functionality of Neovim's event-loop (using LibUV)
 - `vim.lsp`: module that controls the built-in LSP client
 - `vim.treesitter`: module that exposes the functionality of the tree-sitter library
@@ -407,7 +408,7 @@ This list is by no means comprehensive. If you wish to know more about what's ma
 
 #### Tips
 
-Writing `print(vim.inspect(x))` every time you want to inspect the contents of an object can get pretty tedious. It might be worthwhile to have a global wrapper function somewhere in your configuration:
+Writing `print(vim.inspect(x))` every time you want to inspect the contents of an object can get pretty tedious. It might be worthwhile to have a global wrapper function somewhere in your configuration (in Neovim 0.7.0+, this function is built-in, see [`:help vim.pretty_print()`](https://neovim.io/doc/user/lua.html#vim.pretty_print())):
 
 ```lua
 function _G.put(...)

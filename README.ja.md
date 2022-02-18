@@ -401,9 +401,10 @@ NeovimはLuaからAPIを使うためのエントリーポイントとして、`v
 
 いくつかの注目すべき関数とモジュール:
 
-- `vim.inspect`: 読みやすい形式のLuaオブジェクト(テーブルを調べるのに便利です。)
+- `vim.inspect`: Luaオブジェクトを人間が読みやすい文字列に変換する(テーブルを調べるのに便利です。)
 - `vim.regex`: LuaからVimの正規表現を使う
 - `vim.api`: API関数を公開するモジュール(リモートプラグインで使うAPIと同じです)
+- `vim.ui`: プラグインから利用できる上書き可能な関数
 - `vim.loop`: Neovimのイベントループ機能を公開するモジュール(LibUVを使います)
 - `vim.lsp`: 組込みのLSPクライアントを操作するモジュール
 - `vim.treesitter`: tree-sitterライブラリの機能を公開するモジュール
@@ -414,7 +415,7 @@ API関数は、[`:help api-global`](https://neovim.io/doc/user/api.html#api-glob
 
 #### Tips
 
-オブジェクトの中身を検査するのに毎回`print(vim.inspect(x)`を書くのは面倒です。設定にグローバルなラッパー関数を含めることは価値があるかもしれません。:
+オブジェクトの中身を検査するのに毎回`print(vim.inspect(x)`を書くのは面倒です。設定にグローバルなラッパー関数を含めることは価値があるかもしれません。(Neovim 0.7.0+では、この関数は組込み関数です。参照 [`:help vim.pretty_print()`](https://neovim.io/doc/user/lua.html#vim.pretty_print())):
 
 ```lua
 function _G.put(...)

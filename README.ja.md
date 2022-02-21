@@ -967,16 +967,143 @@ vim.api.nvim_buf_del_keymap(0, 'i', '<Tab>')
 
 ## ユーザーコマンドを定義する
 
-ユーザーコマンドを作成するインターフェイスは、次のPRで実装されました。現在、Neovim 0.7+ (nightly)のみで使用できます:
+:警告: このセクションで説明するAPI関数はNeovim 0.7.0+のみで使用できます。
 
-- [Pull request #16752](https://github.com/neovim/neovim/pull/16752)
+Neovimはユーザーコマンドを作成するAPI関数を提供します。
 
-- Global user command:
-  - [`nvim_add_user_command()`](https://neovim.io/doc/user/api.html#nvim_add_user_command())
-  - [`nvim_del_user_command()`](https://neovim.io/doc/user/api.html#nvim_del_user_command())
+- Global user commands:
+    - [`vim.api.nvim_add_user_command()`](https://neovim.io/doc/user/api.html#nvim_add_user_command())
+    - [`vim.api.nvim_del_user_command()`](https://neovim.io/doc/user/api.html#nvim_del_user_command())
 - Buffer-local user commands:
-  - [`nvim_buf_add_user_command()`](https://neovim.io/doc/user/api.html#nvim_buf_add_user_command())
-  - [`nvim_buf_del_user_command()`](https://neovim.io/doc/user/api.html#nvim_buf_del_user_command())
+    - [`vim.api.nvim_buf_add_user_command()`](https://neovim.io/doc/user/api.html#nvim_buf_add_user_command())
+    - [`vim.api.nvim_buf_del_user_command()`](https://neovim.io/doc/user/api.html#nvim_buf_del_user_command())
+
+まず `vim.api.nvim_add_user_command()` から始めます
+
+最初の引数はコマンドの名前です(名前は大文字で始める必要があります)。
+
+2つめの引数はコマンドが呼びだされたときに実行するコードです。次のどちらかでコードを指定できます:
+
+文字列(この場合、VimScriptとして実行されます)。`:commands` のように、`<q-args>`, `<range>` などのエスケープシーケンスを使用できます。
+```lua
+vim.api.nvim_add_user_command('Upper', 'echo toupper(<q-args>)', { nargs = 1 })
+-- :command! -nargs=1 Upper echo toupper(<q-args>)
+
+vim.cmd('Upper hello world') -- prints "HELLO WORLD"
+```
+
+もしくは、Lua関数。通常のエスケープシーケンスによって提供されるデータを含む、辞書のようなテーブルを受け取ります(利用できるキーのリストは[`:help nvim_add_user_command()`](https://neovim.io/doc/user/api.html#nvim_add_user_command())で確認できます)。
+```lua
+vim.api.nvim_add_user_command(
+    'Upper',
+    function(opts)
+        print(string.upper(opts.args))
+    end,
+    { nargs = 1 }
+)
+```
+
+3つめの引数はコマンドの属性をテーブルとして渡せます([`:help command-attributes`](https://neovim.io/doc/user/map.html#command-attributes)を参照)。`vim.api.nvim_buf_add_user_command()`を使用すればバッファローカルなユーザーコマンドを定義できるため、`-buffer`は有効な属性ではありません。
+
+追加された2つの属性:
+- `desc`はLuaのコールバックとして定義されたコマンドに対して`:command {cmd}`を実行したときの表示内容を制御できます。
+- `force`は`:command!`を呼び出すのと同じで、同じ名前のユーザーコマンドが既に存在する場合、そのコマンドを置き換えます。Vimscriptとは異なり、デフォルトでtrueです。
+
+`-complete`属性は[`:help :command-complete`](https://neovim.io/doc/user/map.html#:command-complete)に記載されている属性に加え、Lua関数を取ることができます。
+
+```lua
+vim.api.nvim_add_user_command('Upper', function() end, {
+    nargs = 1,
+    complete = function(ArgLead, CmdLine, CursorPos)
+        -- return completion candidates as a list-like table
+        return { 'foo', 'bar', 'baz' }
+    end,
+})
+```
+
+バッファローカルなユーザーコマンドも第1引数にバッファ番号を受け取ります。現在のバッファ用のコマンドを定義することができる`-buffer`より、これは便利です。
+
+```lua
+vim.api.nvim_buf_add_user_command(4, 'Upper', function() end, {})
+```
+
+`vim.api.nvim_del_user_command()` はコマンド名を受け取ります。
+
+```lua
+vim.api.nvim_del_user_command('Upper')
+-- :delcommand Upper
+```
+
+ここでも、`vim.api.nvim_buf_del_user_command()`はバッファ番号を第1引数として受け取り、`0`は現在のバッファを表します。
+
+```lua
+vim.api.nvim_buf_del_user_command(4, 'Upper')
+```
+
+参照:
+- [`:help nvim_add_user_command()`](https://neovim.io/doc/user/api.html#nvim_add_user_command())
+- [`:help 40.2`](https://neovim.io/doc/user/usr_40.html#40.2)
+- [`:help command-attributes`](https://neovim.io/doc/user/map.html#command-attributes)
+
+#### 警告
+
+`<args>`と`<f-args>`のエスケープシーケンスはLua関数で使用できず、`args`キーは常にコマンドに渡される引数を含む文字列です。各引数を個別に取得する場合、文字列を手動でトークン化しないといけません。`<f-args>`の動作は`-narg`属性によって微妙に変化することを、気に留めておいてください。
+
+```vim
+command! -nargs=1 Test1 echo [<f-args>]
+command! -nargs=* Test2 echo [<f-args>]
+
+Test1 this is    a\ test
+" prints `['this is    a\ test']`
+Test2 this is    a\ test
+" prints `['this', 'is', 'a test']`
+```
+
+`:Test1` コマンドは入力した内容をそのまま表示します。`:Test2`は単語で区切り、バックスラッシュ`\`で始まるとき以外、空白を除去します。
+
+Lua関数を使用したときは、`nargs`属性は`args`の値を変更しません:
+```lua
+vim.api.nvim_add_user_command('Test1', function(opts) print(opts.args) end, { nargs = 1 })
+vim.api.nvim_add_user_command('Test2', function(opts) print(opts.args) end, { nargs = '*' })
+```
+```vim
+Test1 this is    a\ test
+" prints `this is    a\ test`
+Test2 this is    a\ test
+" prints `this is    a\ test`
+```
+
+`-complete=custom`属性は自動的に補完候補をフィルタリングし、ワイルドカード([`:help wildcard`](https://neovim.io/doc/user/editing.html#wildcard))をサポートする機能を組み込みます:
+
+```vim
+function! s:completion_function(ArgLead, CmdLine, CursorPos) abort
+    return join([
+        \ 'strawberry',
+        \ 'star',
+        \ 'stellar',
+        \ ], "\n")
+endfunction
+
+command! -nargs=1 -complete=custom,s:completion_function Test echo <q-args>
+" `:Test st[ae]<Tab>` と入力すると "star" と "stellar" を返します
+```
+
+`complete` にLua関数を渡すと、ユーザーにフィルタ方法を任せる`customlist`のような動作をします。
+
+```lua
+vim.api.nvim_add_user_command('Test', function() end, {
+    nargs = 1,
+    complete = function(ArgLead, CmdLine, CursorPos)
+        return {
+            'strawberry',
+            'star',
+            'stellar',
+        }
+    end,
+})
+
+-- 候補リストをフィルタしてないので `:Test z<Tab>` と入力すると全ての補完候補を返します
+```
 
 ## autocommandを定義する
 

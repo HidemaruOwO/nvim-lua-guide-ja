@@ -1107,20 +1107,22 @@ vim.api.nvim_add_user_command('Test', function() end, {
 
 ## autocommandを定義する
 
-augroupsとautocommandのインターフェイスはまだありません。しかし、計画はあります。:
+(この章は現在作成中です)
 
-- [Pull request #12378](https://github.com/neovim/neovim/pull/12378)
+Neovim 0.7.0はautocommands用のAPI関数を持っています。詳細は `:help api-autocmd` を参照してください。
+
 - [Pull request #14661](https://github.com/neovim/neovim/pull/14661) (lua: autocmds take 2)
 
-いまのところ、Vim scriptで作成するか、ラッパープラグイン([norcalli/nvim_utils](https://github.com/norcalli/nvim_utils/blob/master/lua/nvim_utils.lua#L554-L567))を使用できます。
+## ハイライトを定義する
 
-## 構文ハイライトを定義する
+(この章は現在作成中です)
 
-syntax APIはまだ作業中です。いくつかのポインターがあります。:
+Neovim 0.7.0はハイライトグループ用のAPI関数を持っています。
 
-- [Issue #9876](https://github.com/neovim/neovim/issues/9876)
-- [tjdevries/colorbuddy.vim, a library for creating colorschemes in Lua](https://github.com/tjdevries/colorbuddy.vim)
-- [`:help lua-treesitter`](https://neovim.io/doc/user/treesitter.html#lua-treesitter)
+参照:
+- [`:help nvim_set_hl()`](https://neovim.io/doc/user/api.html#nvim_set_hl())
+- [`:help nvim_get_hl_by_id()`](https://neovim.io/doc/user/api.html#nvim_get_hl_by_id())
+- [`:help nvim_get_hl_by_name()`](https://neovim.io/doc/user/api.html#nvim_get_hl_by_name())
 
 ## 一般的なTipsと推奨
 

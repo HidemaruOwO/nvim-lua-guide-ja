@@ -1047,32 +1047,6 @@ vim.api.nvim_buf_del_user_command(4, 'Upper')
 
 #### 警告
 
-`<args>`と`<f-args>`のエスケープシーケンスはLua関数で使用できず、`args`キーは常にコマンドに渡される引数を含む文字列です。各引数を個別に取得する場合、文字列を手動でトークン化しないといけません。`<f-args>`の動作は`-narg`属性によって微妙に変化することを、気に留めておいてください。
-
-```vim
-command! -nargs=1 Test1 echo [<f-args>]
-command! -nargs=* Test2 echo [<f-args>]
-
-Test1 this is    a\ test
-" prints `['this is    a\ test']`
-Test2 this is    a\ test
-" prints `['this', 'is', 'a test']`
-```
-
-`:Test1` コマンドは入力した内容をそのまま表示します。`:Test2`は単語で区切り、バックスラッシュ`\`で始まるとき以外、空白を除去します。
-
-Lua関数を使用したときは、`nargs`属性は`args`の値を変更しません:
-```lua
-vim.api.nvim_add_user_command('Test1', function(opts) print(opts.args) end, { nargs = 1 })
-vim.api.nvim_add_user_command('Test2', function(opts) print(opts.args) end, { nargs = '*' })
-```
-```vim
-Test1 this is    a\ test
-" prints `this is    a\ test`
-Test2 this is    a\ test
-" prints `this is    a\ test`
-```
-
 `-complete=custom`属性は自動的に補完候補をフィルタリングし、ワイルドカード([`:help wildcard`](https://neovim.io/doc/user/editing.html#wildcard))をサポートする機能を組み込みます:
 
 ```vim

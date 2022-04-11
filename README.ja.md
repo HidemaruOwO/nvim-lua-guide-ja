@@ -1314,9 +1314,15 @@ Luaを使用する利点の1つは実際にLuaを書く必要がないことで�
 lispをLuaにコンパイルします。[Olical/aniseed](https://github.com/Olical/aniseed)または、[Hotpot](https://github.com/rktjmp/hotpot.nvim)を使用するとNeovimのプラグインと設定を書くことができます。
 さらに、[Olical/conjure](https://github.com/Olical/conjure)は対話的な開発環境を提供します(他の言語の中で)。
 
+- [Teal](https://github.com/teal-language/tl)
+
+Tealの名前の由来はTL(typed lua)の発音からです。
+まさにその通りで、強力な型をLuaに追加し、それ以外は標準のLuaの構文に近づけています。
+[nvim-teal-maker](https://github.com/svermeulen/nvim-teal-maker)プラグインを使用して、
+TealでNeovimプラグインや設定ファイルを書けます。
+
 その他の興味深いプロジェクト:
 - [TypeScriptToLua/TypeScriptToLua](https://github.com/TypeScriptToLua/TypeScriptToLua)
-- [teal-language/tl](https://github.com/teal-language/tl)
 - [Haxe](https://haxe.org/)
 - [SwadicalRag/wasm2lua](https://github.com/SwadicalRag/wasm2lua)
 - [hengestone/lua-languages](https://github.com/hengestone/lua-languages)

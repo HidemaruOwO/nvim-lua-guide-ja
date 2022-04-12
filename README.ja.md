@@ -650,15 +650,15 @@ print(vim.api.nvim_buf_get_option(10, 'shiftwidth')) -- 4
 
 もっと使い慣れた方法でオプションを設定したい場合、いくつかのメタアクセサーを使用できます。それらは、上記のAPI関数をラップしたものでオプションを変数のように操作できます。:
 
-- [`vim.o.{option}`](https://neovim.io/doc/user/lua.html#vim.o): `:set`のように動作します
-- [`vim.go.{option}`](https://neovim.io/doc/user/lua.html#vim.go): `:setglobal`のように動作します
-- [`vim.bo.{option}`](https://neovim.io/doc/user/lua.html#vim.bo): バッファローカルオプションの場合`:setlocal`のように動作します
-- [`vim.wo.{option}`](https://neovim.io/doc/user/lua.html#vim.wo): ウィンドウローカルオプションの場合`:setlocal`のように動作します
+- [`vim.o.{option}`](https://neovim.io/doc/user/lua.html#vim.o): `:let &{option-name}`のように動作します
+- [`vim.go.{option}`](https://neovim.io/doc/user/lua.html#vim.go): `:let &g:{option-name}`のように動作します
+- [`vim.bo.{option}`](https://neovim.io/doc/user/lua.html#vim.bo): バッファローカルオプションの場合`:let &l:{option-name}`のように動作します
+- [`vim.wo.{option}`](https://neovim.io/doc/user/lua.html#vim.wo): ウィンドウローカルオプションの場合`:let &l:{option-name}`のように動作します
 
 ```lua
-vim.o.smarttab = false
+vim.o.smarttab = false -- let &smarttab = v:false
 print(vim.o.smarttab) -- false
-vim.o.isfname = vim.o.isfname .. ',@-@' -- on Linux: set isfname+=@-@
+vim.o.isfname = vim.o.isfname .. ',@-@' -- on Linux: let &isfname = &isfname .. ',@-@'
 print(vim.o.isfname) -- '@,48-57,/,.,-,_,+,,,#,$,%,~,=,@-@'
 
 vim.bo.shiftwidth = 4

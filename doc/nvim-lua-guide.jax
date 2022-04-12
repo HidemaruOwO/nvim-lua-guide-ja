@@ -738,15 +738,15 @@ boolな(`(no)number`のような)オプションは`true`か`false`のどちら�
 
 もっと使い慣れた方法でオプションを設定したい場合、いくつかのメタアクセサーを使用できます。それらは、上記のAPI関数をラップしたものでオプションを変数のように操作できます。:
 
-- `vim.o.{option}`: `:set`のように動作します
-- `vim.go.{option}`: `:setglobal`のように動作します
-- `vim.bo.{option}`: バッファローカルオプションの場合`:setlocal`のように動作します
-- `vim.wo.{option}`: ウィンドウローカルオプションの場合`:setlocal`のように動作します
+- `vim.o.{option}`: `:let &{option-name}`のように動作します
+- `vim.go.{option}`: `:let &g:{option-name}`のように動作します
+- `vim.bo.{option}`: バッファローカルオプションの場合`:let &l:{option-name}`のように動作します
+- `vim.wo.{option}`: ウィンドウローカルオプションの場合`:let &l:{option-name}`のように動作します
 
     >
-    vim.o.smarttab = false
+    vim.o.smarttab = false -- let &smarttab = v:false
     print(vim.o.smarttab) -- false
-    vim.o.isfname = vim.o.isfname .. ',@-@' -- on Linux: set isfname+=@-@
+    vim.o.isfname = vim.o.isfname .. ',@-@' -- on Linux: let &isfname = &isfname .. ',@-@'
     print(vim.o.isfname) -- '@,48-57,/,.,-,_,+,,,#,$,%,~,=,@-@'
 
     vim.bo.shiftwidth = 4

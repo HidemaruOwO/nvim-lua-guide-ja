@@ -1086,13 +1086,13 @@ WARNING: このセクションで説明するAPI関数はNeovim 0.7.0+のみで�
 Neovimはユーザーコマンドを作成するAPI関数を提供します。
 
 - Global user commands:
-    - |nvim_add_user_command()|
+    - |nvim_create_user_command()|
     - |nvim_del_user_command()|
 - Buffer-local user commands:
-    - |nvim_buf_add_user_command()|
+    - |nvim_buf_create_user_command()|
     - |nvim_buf_del_user_command()|
 
-まず `vim.api.nvim_add_user_command()` から始めます
+まず `vim.api.nvim_create_user_command()` から始めます
 
 最初の引数はコマンドの名前です(名前は大文字で始める必要があります)。
 
@@ -1101,7 +1101,7 @@ Neovimはユーザーコマンドを作成するAPI関数を提供します。
 文字列(この場合、VimScriptとして実行されます)。
 `:commands` のように、`<q-args>`, `<range>` などのエスケープシーケンスを使用できます。
     >
-    vim.api.nvim_add_user_command('Upper', 'echo toupper(<q-args>)', {
+    vim.api.nvim_create_user_command('Upper', 'echo toupper(<q-args>)', {
     nargs = 1 })
     -- :command! -nargs=1 Upper echo toupper(<q-args>)
 
@@ -1110,9 +1110,9 @@ Neovimはユーザーコマンドを作成するAPI関数を提供します。
 
 もしくは、Lua関数。
 通常のエスケープシーケンスによって提供されるデータを含む、 辞書のようなテーブルを受け取ります
-(利用できるキーのリストは|nvim_add_user_command()|で確認できます)。
+(利用できるキーのリストは|nvim_create_user_command()|で確認できます)。
     >
-    vim.api.nvim_add_user_command(
+    vim.api.nvim_create_user_command(
         'Upper',
         function(opts)
             print(string.upper(opts.args))
@@ -1122,7 +1122,7 @@ Neovimはユーザーコマンドを作成するAPI関数を提供します。
 <
 
 3つめの引数はコマンドの属性をテーブルとして渡せます(|command-attributes|を参照)。
-`vim.api.nvim_buf_add_user_command()`を使用すればバッファローカルなユーザーコマンドを定義できるため、
+`vim.api.nvim_buf_create_user_command()`を使用すればバッファローカルなユーザーコマンドを定義できるため、
 `-buffer`は有効な属性ではありません。
 
 追加された2つの属性:
@@ -1133,7 +1133,7 @@ Neovimはユーザーコマンドを作成するAPI関数を提供します。
 `-complete`属性は|:command-complete|に記載されている属性に加え、Lua関数を取ることができます。
 
     >
-    vim.api.nvim_add_user_command('Upper', function() end, {
+    vim.api.nvim_create_user_command('Upper', function() end, {
         nargs = 1,
         complete = function(ArgLead, CmdLine, CursorPos)
             -- return completion candidates as a list-like table
@@ -1146,7 +1146,7 @@ Neovimはユーザーコマンドを作成するAPI関数を提供します。
 現在のバッファ用のコマンドを定義することができる`-buffer`より、これは便利です。
 
     >
-    vim.api.nvim_buf_add_user_command(4, 'Upper', function() end, {})
+    vim.api.nvim_buf_create_user_command(4, 'Upper', function() end, {})
 <
 
 `vim.api.nvim_del_user_command()` はコマンド名を受け取ります。
@@ -1163,7 +1163,7 @@ Neovimはユーザーコマンドを作成するAPI関数を提供します。
 <
 
 参照:
-- |nvim_add_user_command()|
+- |nvim_create_user_command()|
 - |40.2|
 - |command-attributes|
 
@@ -1189,7 +1189,7 @@ Neovimはユーザーコマンドを作成するAPI関数を提供します。
 `complete` にLua関数に渡すと、ユーザーにフィルタ方法を任せる`customlist`のような動作をします。
 
     >
-    vim.api.nvim_add_user_command('Test', function() end, {
+    vim.api.nvim_create_user_command('Test', function() end, {
         nargs = 1,
         complete = function(ArgLead, CmdLine, CursorPos)
             return {

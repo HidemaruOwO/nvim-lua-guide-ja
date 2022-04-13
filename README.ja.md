@@ -650,15 +650,15 @@ print(vim.api.nvim_buf_get_option(10, 'shiftwidth')) -- 4
 
 もっと使い慣れた方法でオプションを設定したい場合、いくつかのメタアクセサーを使用できます。それらは、上記のAPI関数をラップしたものでオプションを変数のように操作できます。:
 
-- [`vim.o.{option}`](https://neovim.io/doc/user/lua.html#vim.o): `:set`のように動作します
-- [`vim.go.{option}`](https://neovim.io/doc/user/lua.html#vim.go): `:setglobal`のように動作します
-- [`vim.bo.{option}`](https://neovim.io/doc/user/lua.html#vim.bo): バッファローカルオプションの場合`:setlocal`のように動作します
-- [`vim.wo.{option}`](https://neovim.io/doc/user/lua.html#vim.wo): ウィンドウローカルオプションの場合`:setlocal`のように動作します
+- [`vim.o.{option}`](https://neovim.io/doc/user/lua.html#vim.o): `:let &{option-name}`のように動作します
+- [`vim.go.{option}`](https://neovim.io/doc/user/lua.html#vim.go): `:let &g:{option-name}`のように動作します
+- [`vim.bo.{option}`](https://neovim.io/doc/user/lua.html#vim.bo): バッファローカルオプションの場合`:let &l:{option-name}`のように動作します
+- [`vim.wo.{option}`](https://neovim.io/doc/user/lua.html#vim.wo): ウィンドウローカルオプションの場合`:let &l:{option-name}`のように動作します
 
 ```lua
-vim.o.smarttab = false
+vim.o.smarttab = false -- let &smarttab = v:false
 print(vim.o.smarttab) -- false
-vim.o.isfname = vim.o.isfname .. ',@-@' -- on Linux: set isfname+=@-@
+vim.o.isfname = vim.o.isfname .. ',@-@' -- on Linux: let &isfname = &isfname .. ',@-@'
 print(vim.o.isfname) -- '@,48-57,/,.,-,_,+,,,#,$,%,~,=,@-@'
 
 vim.bo.shiftwidth = 4
@@ -972,13 +972,13 @@ vim.api.nvim_buf_del_keymap(0, 'i', '<Tab>')
 Neovimはユーザーコマンドを作成するAPI関数を提供します。
 
 - Global user commands:
-    - [`vim.api.nvim_add_user_command()`](https://neovim.io/doc/user/api.html#nvim_add_user_command())
+    - [`vim.api.nvim_create_user_command()`](https://neovim.io/doc/user/api.html#nvim_create_user_command())
     - [`vim.api.nvim_del_user_command()`](https://neovim.io/doc/user/api.html#nvim_del_user_command())
 - Buffer-local user commands:
-    - [`vim.api.nvim_buf_add_user_command()`](https://neovim.io/doc/user/api.html#nvim_buf_add_user_command())
+    - [`vim.api.nvim_buf_create_user_command()`](https://neovim.io/doc/user/api.html#nvim_buf_create_user_command())
     - [`vim.api.nvim_buf_del_user_command()`](https://neovim.io/doc/user/api.html#nvim_buf_del_user_command())
 
-まず `vim.api.nvim_add_user_command()` から始めます
+まず `vim.api.nvim_create_user_command()` から始めます
 
 最初の引数はコマンドの名前です(名前は大文字で始める必要があります)。
 
@@ -986,15 +986,15 @@ Neovimはユーザーコマンドを作成するAPI関数を提供します。
 
 文字列(この場合、VimScriptとして実行されます)。`:commands` のように、`<q-args>`, `<range>` などのエスケープシーケンスを使用できます。
 ```lua
-vim.api.nvim_add_user_command('Upper', 'echo toupper(<q-args>)', { nargs = 1 })
+vim.api.nvim_create_user_command('Upper', 'echo toupper(<q-args>)', { nargs = 1 })
 -- :command! -nargs=1 Upper echo toupper(<q-args>)
 
 vim.cmd('Upper hello world') -- prints "HELLO WORLD"
 ```
 
-もしくは、Lua関数。通常のエスケープシーケンスによって提供されるデータを含む、辞書のようなテーブルを受け取ります(利用できるキーのリストは[`:help nvim_add_user_command()`](https://neovim.io/doc/user/api.html#nvim_add_user_command())で確認できます)。
+もしくは、Lua関数。通常のエスケープシーケンスによって提供されるデータを含む、辞書のようなテーブルを受け取ります(利用できるキーのリストは[`:help nvim_create_user_command()`](https://neovim.io/doc/user/api.html#nvim_create_user_command())で確認できます)。
 ```lua
-vim.api.nvim_add_user_command(
+vim.api.nvim_create_user_command(
     'Upper',
     function(opts)
         print(string.upper(opts.args))
@@ -1003,7 +1003,7 @@ vim.api.nvim_add_user_command(
 )
 ```
 
-3つめの引数はコマンドの属性をテーブルとして渡せます([`:help command-attributes`](https://neovim.io/doc/user/map.html#command-attributes)を参照)。`vim.api.nvim_buf_add_user_command()`を使用すればバッファローカルなユーザーコマンドを定義できるため、`-buffer`は有効な属性ではありません。
+3つめの引数はコマンドの属性をテーブルとして渡せます([`:help command-attributes`](https://neovim.io/doc/user/map.html#command-attributes)を参照)。`vim.api.nvim_buf_create_user_command()`を使用すればバッファローカルなユーザーコマンドを定義できるため、`-buffer`は有効な属性ではありません。
 
 追加された2つの属性:
 - `desc`はLuaのコールバックとして定義されたコマンドに対して`:command {cmd}`を実行したときの表示内容を制御できます。
@@ -1012,7 +1012,7 @@ vim.api.nvim_add_user_command(
 `-complete`属性は[`:help :command-complete`](https://neovim.io/doc/user/map.html#:command-complete)に記載されている属性に加え、Lua関数を取ることができます。
 
 ```lua
-vim.api.nvim_add_user_command('Upper', function() end, {
+vim.api.nvim_create_user_command('Upper', function() end, {
     nargs = 1,
     complete = function(ArgLead, CmdLine, CursorPos)
         -- return completion candidates as a list-like table
@@ -1024,7 +1024,7 @@ vim.api.nvim_add_user_command('Upper', function() end, {
 バッファローカルなユーザーコマンドも第1引数にバッファ番号を受け取ります。現在のバッファ用のコマンドを定義することができる`-buffer`より、これは便利です。
 
 ```lua
-vim.api.nvim_buf_add_user_command(4, 'Upper', function() end, {})
+vim.api.nvim_buf_create_user_command(4, 'Upper', function() end, {})
 ```
 
 `vim.api.nvim_del_user_command()` はコマンド名を受け取ります。
@@ -1041,7 +1041,7 @@ vim.api.nvim_buf_del_user_command(4, 'Upper')
 ```
 
 参照:
-- [`:help nvim_add_user_command()`](https://neovim.io/doc/user/api.html#nvim_add_user_command())
+- [`:help nvim_create_user_command()`](https://neovim.io/doc/user/api.html#nvim_create_user_command())
 - [`:help 40.2`](https://neovim.io/doc/user/usr_40.html#40.2)
 - [`:help command-attributes`](https://neovim.io/doc/user/map.html#command-attributes)
 
@@ -1065,7 +1065,7 @@ command! -nargs=1 -complete=custom,s:completion_function Test echo <q-args>
 `complete` にLua関数を渡すと、ユーザーにフィルタ方法を任せる`customlist`のような動作をします。
 
 ```lua
-vim.api.nvim_add_user_command('Test', function() end, {
+vim.api.nvim_create_user_command('Test', function() end, {
     nargs = 1,
     complete = function(ArgLead, CmdLine, CursorPos)
         return {

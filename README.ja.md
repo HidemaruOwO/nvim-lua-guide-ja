@@ -1251,6 +1251,31 @@ globals = {
 このプラグインは[Debug Adapter Protocol](https://microsoft.github.io/debug-adapter-protocol/)を使用しています。
 デバッグアダプターに接続するには、[mfussenegger/nvim-dap](https://github.com/mfussenegger/nvim-dap/)や[puremourning/vimspector](https://github.com/puremourning/vimspector/)のようなDAPクライアントが必要です。
 
+### Luaマッピング/コマンド/オートコマンドのデバッグ
+
+マッピング/コマンド/オートコマンドが定義されている位置を `:verbose` コマンドで確認できます:
+
+```vim
+:verbose map m
+```
+
+```text
+n  m_          * <Cmd>echo 'example'<CR>
+        Last set from ~/.config/nvim/init.vim line 26
+```
+
+デフォルトでは、Luaのパフォーマンス上の理由でこの機能は無効です。
+Neovim起動時にverboseのレベルが0より上なら、この機能を有効にできます:
+
+```sh
+nvim -V1
+```
+
+参照:
+- [`:help 'verbose'`](https://neovim.io/doc/user/options.html#'verbose')
+- [`:help -V`](https://neovim.io/doc/user/starting.html#-V)
+- [neovim/neovim#15079](https://github.com/neovim/neovim/pull/15079)
+
 ### Luaコードのテスト
 
 - [plenary.nvim: test harness](https://github.com/nvim-lua/plenary.nvim/#plenarytest_harness)

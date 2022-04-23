@@ -1204,12 +1204,12 @@ Neovimはユーザーコマンドを作成するAPI関数を提供します。
 <
 
 ==============================================================================
-autocommandを定義する
+オートコマンドを定義する
                                                 *luaguide-defining-autocommands*
 
 (この章は現在作成中です)
 
-Neovim 0.7.0はautocommands用のAPI関数を持っています。詳細は|api-autocmd|を参照してください。
+Neovim 0.7.0はオートコマンド用のAPI関数を持っています。詳細は|api-autocmd|を参照してください。
 
 - Pull request #14661: https://github.com/neovim/neovim/pull/14661 (lua: autocmds take 2)
 

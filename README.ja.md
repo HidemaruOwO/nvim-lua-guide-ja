@@ -1079,11 +1079,11 @@ vim.api.nvim_create_user_command('Test', function() end, {
 -- 候補リストをフィルタしてないので `:Test z<Tab>` と入力すると全ての補完候補を返します
 ```
 
-## autocommandを定義する
+## オートコマンドを定義する
 
 (この章は現在作成中です)
 
-Neovim 0.7.0はautocommands用のAPI関数を持っています。詳細は `:help api-autocmd` を参照してください。
+Neovim 0.7.0はオートコマンド用のAPI関数を持っています。詳細は `:help api-autocmd` を参照してください。
 
 - [Pull request #14661](https://github.com/neovim/neovim/pull/14661) (lua: autocmds take 2)
 

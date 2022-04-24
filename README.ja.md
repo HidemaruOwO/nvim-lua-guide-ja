@@ -362,7 +362,7 @@ end
 EOF
 
 inoremap <silent> <expr> <Tab>
-    \ pumvisible() ? "\<C-n>" :
+    \ pumvisible() ? "\<C-N>" :
     \ v:lua.check_back_space() ? "\<Tab>" :
     \ completion#trigger_completion()
 
@@ -543,20 +543,20 @@ vim.cmd([[%s/\Vfoo/bar/g]])
 次のようなマッピングを見たことがあるかもしれません。:
 
 ```vim
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <Tab> pumvisible() ? "\<C-N>" : "\<Tab>"
 ```
 
 同じことをLuaでやると大変です。次のようにやるかもしれません。:
 
 ```lua
 function _G.smart_tab()
-    return vim.fn.pumvisible() == 1 and [[\<C-n>]] or [[\<Tab>]]
+    return vim.fn.pumvisible() == 1 and [[\<C-N>]] or [[\<Tab>]]
 end
 
 vim.api.nvim_set_keymap('i', '<Tab>', 'v:lua.smart_tab()', {expr = true, noremap = true})
 ```
 
-マッピングに `\<Tab>` と `\<C-n>` が挿入されているのを知るためだけに...
+マッピングに `\<Tab>` と `\<C-N>` が挿入されているのを知るためだけに...
 
 キーコードをエスケープできるのは、Vim scriptの機能です。`\r`, `\42` や `\x10` のような多くのプログラミング言語に共通する通常のエスケープシーケンスとは別に、Vim scriptの `expr-quotes` (ダブルクォートで囲まれる文字列)を使用すると、人間が読める表現のVimキーコードをエスケープします。
 
@@ -587,10 +587,18 @@ local function t(str)
 end
 
 function _G.smart_tab()
-    return vim.fn.pumvisible() == 1 and t'<C-n>' or t'<Tab>'
+    return vim.fn.pumvisible() == 1 and t'<C-N>' or t'<Tab>'
 end
 
 vim.api.nvim_set_keymap('i', '<Tab>', 'v:lua.smart_tab()', {expr = true, noremap = true})
+```
+
+`vim.keymap.set()`では、このハックは必要ありません。`expr`が有効な場合、デフォルトで自動的に変換されます。:
+
+```lua
+vim.keymap.set('i', '<Tab>', function()
+    return vim.fn.pumvisible() == 1 and '<C-N>' or '<Tab>'
+end, {expr = true})
 ```
 
 参照:
@@ -888,6 +896,8 @@ end
 
 ## マッピングを定義する
 
+### API関数
+
 Neovimはマッピングを設定、取得、削除するためのAPI関数を提供します。:
 
 - グローバルマッピング:
@@ -923,6 +933,7 @@ Neovimはマッピングを設定、取得、削除するためのAPI関数を�
 3つ目の引数は、右側のマッピングを含む文字列(実行するコマンド)です。
 
 最後の引数は、[`:help :map-arguments`](https://neovim.io/doc/user/map.html#:map-arguments)で定義されているbool型のオプションのテーブルです(`noremap`を含み、`buffer`を除く)。
+Neovim 0.7.0から、マッピング実行時、右側のマッピングの代わりに `callback` オプションに渡した関数を呼び出せます。
 
 バッファローカルなマッピングは、バッファ番号を引数の最初に受け取ります(`0`を指定した場合、カレントバッファです)。
 
@@ -934,6 +945,15 @@ vim.api.nvim_set_keymap('n', '<Leader>tegf',  [[<Cmd>lua require('telescope.buil
 
 vim.api.nvim_buf_set_keymap(0, '', 'cc', 'line(".") == 1 ? "cc" : "ggcc"', { noremap = true, expr = true })
 -- :noremap <buffer> <expr> cc line('.') == 1 ? 'cc' : 'ggcc'
+
+vim.api.nvim_set_keymap('n', '<Leader>ex', '', {
+    noremap = true,
+    callback = function()
+        print('My example')
+    end,
+    -- Lua関数は便利な文字列表現を持っていないため、 "desc" オプションを使用してマッピングの説明を記入できます。
+    desc = 'Prints "My example" in the message area',
+})
 ```
 
 `vim.api.nvim_get_keymap()`は、モードの省略名(上記の表を参照)を含む文字列を受け取ります。
@@ -963,6 +983,78 @@ vim.api.nvim_del_keymap('n', '<Leader><Space>')
 ```lua
 vim.api.nvim_buf_del_keymap(0, 'i', '<Tab>')
 -- :iunmap <buffer> <Tab>
+```
+
+### vim.keymap
+
+:警告: このセクションで説明するAPI関数はNeovim 0.7.0+のみで使用できます。
+
+Neovimはマッピングを設定/削除できる2つの関数を提供します:
+- [`vim.keymap.set()`](https://neovim.io/doc/user/lua.html#vim.keymap.set())
+- [`vim.keymap.del()`](https://neovim.io/doc/user/lua.html#vim.keymap.del())
+
+これらは、上記のAPI関数に糖類構文を追加したようなものです。
+
+`vim.keymap.set()` は最初の引数として文字列を受け取ります。
+また、複数のモードのマッピングを1度に定義するため、文字列のテーブルを受け取ることもできます:
+
+```lua
+vim.keymap.set('n', '<Leader>ex1', '<Cmd>lua vim.notify("Example 1")<CR>')
+vim.keymap.set({'n', 'c'}, '<Leader>ex2', '<Cmd>lua vim.notify("Example 2")<CR>')
+```
+
+2つ目の引数は左側のマッピングです。
+
+3つ目の引数は右側のマッピングで、文字列かLua関数を受け取れます。
+
+```lua
+vim.keymap.set('n', '<Leader>ex1', '<Cmd>echomsg "Example 1"<CR>')
+vim.keymap.set('n', '<Leader>ex2', function() print("Example 2") end)
+vim.keymap.set('n', '<Leader>pl1', require('plugin').plugin_action)
+-- モジュールの読み込みによる起動コストを避けるため、マッピングを呼び出したときにモジュールの遅延読みこみができるように関数でラップすることができます。:
+vim.keymap.set('n', '<Leader>pl2', function() require('plugin').plugin_action() end)
+```
+
+4つ目の引数(省略可能)はオプションのテーブルで、 `vim.api.nvim_set_keymap()` に渡されるオプションに対応しており、いくつか追加項目があります([`:help vim.keymap.set()`](https://neovim.io/doc/user/lua.html#vim.keymap.set())に一覧があります)。
+
+```lua
+vim.keymap.set('n', '<Leader>ex1', '<Cmd>echomsg "Example 1"<CR>', {buffer = true})
+vim.keymap.set('n', '<Leader>ex2', function() print('Example 2') end, {desc = 'Prints "Example 2" to the message area'})
+```
+
+このAPIが面白いところとして、Vimのマッピングの歴史的な癖をいくつか解消しています。
+- `rhs` が `<Plug>` マッピングである場合以外、デフォルトで `noremap` です。
+  このため、マッピングが再帰的であるかを考える必要はあまりないです。
+
+```lua
+vim.keymap.set('n', '<Leader>test1', '<Cmd>echo "test"<CR>')
+-- :nnoremap <Leader>test <Cmd>echo "test"<CR>
+
+-- マッピングを再帰的に行ないたい場合は、 `remap` オプションを `true` にします
+vim.keymap.set('n', '>', ']', {remap = true})
+-- :nmap > ]
+
+-- <Plug> マッピングは再帰的でないと機能しませんが、 vim.keymap.set() は自動的に処理します
+vim.keymap.set('n', '<Leader>plug', '<Plug>(plugin)')
+-- :nmap <Leader>plug <Plug>(plugin)
+```
+
+- `expr` マッピングが有効なら、 Lua関数が返す文字列に対して `nvim_replace_termcodes()` が自動的に適用されます:
+
+```lua
+vim.keymap.set('i', '<Tab>', function()
+    return vim.fn.pumvisible == 1 and '<C-N>' or '<Tab>'
+end, {expr = true})
+```
+
+参照:
+- [`:help recursive_mapping`](https://neovim.io/doc/user/map.html#recursive_mapping)
+
+`vim.keymap.del()` も同じように機能しますが、マッピングを削除します:
+
+```lua
+vim.keymap.del('n', '<Leader>ex1')
+vim.keymap.del({'n', 'c'}, '<Leader>ex2', {buffer = true})
 ```
 
 ## ユーザーコマンドを定義する
@@ -1079,11 +1171,11 @@ vim.api.nvim_create_user_command('Test', function() end, {
 -- 候補リストをフィルタしてないので `:Test z<Tab>` と入力すると全ての補完候補を返します
 ```
 
-## autocommandを定義する
+## オートコマンドを定義する
 
 (この章は現在作成中です)
 
-Neovim 0.7.0はautocommands用のAPI関数を持っています。詳細は `:help api-autocmd` を参照してください。
+Neovim 0.7.0はオートコマンド用のAPI関数を持っています。詳細は `:help api-autocmd` を参照してください。
 
 - [Pull request #14661](https://github.com/neovim/neovim/pull/14661) (lua: autocmds take 2)
 
@@ -1250,6 +1342,31 @@ globals = {
 
 このプラグインは[Debug Adapter Protocol](https://microsoft.github.io/debug-adapter-protocol/)を使用しています。
 デバッグアダプターに接続するには、[mfussenegger/nvim-dap](https://github.com/mfussenegger/nvim-dap/)や[puremourning/vimspector](https://github.com/puremourning/vimspector/)のようなDAPクライアントが必要です。
+
+### Luaマッピング/コマンド/オートコマンドのデバッグ
+
+マッピング/コマンド/オートコマンドが定義されている位置を `:verbose` コマンドで確認できます:
+
+```vim
+:verbose map m
+```
+
+```text
+n  m_          * <Cmd>echo 'example'<CR>
+        Last set from ~/.config/nvim/init.vim line 26
+```
+
+デフォルトでは、Luaのパフォーマンス上の理由でこの機能は無効です。
+Neovim起動時にverboseのレベルが0より上なら、この機能を有効にできます:
+
+```sh
+nvim -V1
+```
+
+参照:
+- [`:help 'verbose'`](https://neovim.io/doc/user/options.html#'verbose')
+- [`:help -V`](https://neovim.io/doc/user/starting.html#-V)
+- [neovim/neovim#15079](https://github.com/neovim/neovim/pull/15079)
 
 ### Luaコードのテスト
 

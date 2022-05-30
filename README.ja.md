@@ -1022,6 +1022,13 @@ vim.keymap.set('n', '<Leader>ex1', '<Cmd>echomsg "Example 1"<CR>', {buffer = tru
 vim.keymap.set('n', '<Leader>ex2', function() print('Example 2') end, {desc = 'Prints "Example 2" to the message area'})
 ```
 
+文字列を使用して定義するキーマップとLua関数で定義したキーマップは違います。
+通常の`:nmap <Leader>ex1`のようなキーマップ情報を表示する方法では、
+`Lua function` とだけ表示され有用な情報（関数の内容自体）が表示されません。
+キーマップの動作を説明する`desc`キーを追加するのを推奨します。
+これはプラグインのマッピングのドキュメント化に特に重要です。
+ユーザーはキーマップの使用方法をより簡単に理解できます。
+
 このAPIが面白いところとして、Vimのマッピングの歴史的な癖をいくつか解消しています。
 - `rhs` が `<Plug>` マッピングである場合以外、デフォルトで `noremap` です。
   このため、マッピングが再帰的であるかを考える必要はあまりないです。
@@ -1099,6 +1106,7 @@ vim.api.nvim_create_user_command(
 
 追加された2つの属性:
 - `desc`はLuaのコールバックとして定義されたコマンドに対して`:command {cmd}`を実行したときの表示内容を制御できます。
+  キーマップと同様、Lua関数として定義するコマンドには `desc`キーを追加するのを推奨します。
 - `force`は`:command!`を呼び出すのと同じで、同じ名前のユーザーコマンドが既に存在する場合、そのコマンドを置き換えます。Vimscriptとは異なり、デフォルトでtrueです。
 
 `-complete`属性は[`:help :command-complete`](https://neovim.io/doc/user/map.html#:command-complete)に記載されている属性に加え、Lua関数を取ることができます。

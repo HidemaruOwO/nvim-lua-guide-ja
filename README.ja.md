@@ -54,7 +54,7 @@ Luaでプラグインを書くためのチュートリアルが既にいくつ�
 
 Neovimは、`init.vim`の代わりに設定ファイルとして`init.lua`を読み込むことをサポートしています。
 
-Note: `init.lua`は_完全に_オプションです。`init.vim`は廃止されず、設定として有効です。
+Note: `init.lua`は _完全に_ オプションです。`init.vim`は廃止されず、設定として有効です。
 いくつかの機能は、まだ100%Luaに公開されていないので注意してください。
 
 参照:
@@ -396,7 +396,7 @@ echo map([1, 2, 3], v:lua.global_callback)
 
 ## vim名前空間
 
-NeovimはLuaからAPIを使うためのエントリーポイントとして、`vim`グーローバル変数を公開しています。
+NeovimはLuaからAPIを使うためのエントリーポイントとして、`vim`グローバル変数を公開しています。
 これは、拡張された標準ライブラリやさまざまなサブモジュールを提供します。
 
 いくつかの注目すべき関数とモジュール:
@@ -415,7 +415,7 @@ API関数は、[`:help api-global`](https://neovim.io/doc/user/api.html#api-glob
 
 #### Tips
 
-オブジェクトの中身を検査するのに毎回`print(vim.inspect(x)`を書くのは面倒です。設定にグローバルなラッパー関数を含めることは価値があるかもしれません。(Neovim 0.7.0+では、この関数は組込み関数です。参照 [`:help vim.pretty_print()`](https://neovim.io/doc/user/lua.html#vim.pretty_print())):
+オブジェクトの中身を検査するのに毎回`print(vim.inspect(x))`を書くのは面倒です。設定にグローバルなラッパー関数を含めることは価値があるかもしれません。(Neovim 0.7.0+では、この関数は組込み関数です。参照 [`:help vim.pretty_print()`](https://neovim.io/doc/user/lua.html#vim.pretty_print())):
 
 ```lua
 function _G.put(...)
@@ -987,7 +987,7 @@ vim.api.nvim_buf_del_keymap(0, 'i', '<Tab>')
 
 ### vim.keymap
 
-:警告: このセクションで説明するAPI関数はNeovim 0.7.0+のみで使用できます。
+:warning: このセクションで説明するAPI関数はNeovim 0.7.0+のみで使用できます。
 
 Neovimはマッピングを設定/削除できる2つの関数を提供します:
 - [`vim.keymap.set()`](https://neovim.io/doc/user/lua.html#vim.keymap.set())
@@ -1066,7 +1066,7 @@ vim.keymap.del({'n', 'c'}, '<Leader>ex2', {buffer = true})
 
 ## ユーザーコマンドを定義する
 
-:警告: このセクションで説明するAPI関数はNeovim 0.7.0+のみで使用できます。
+:warning: このセクションで説明するAPI関数はNeovim 0.7.0+のみで使用できます。
 
 Neovimはユーザーコマンドを作成するAPI関数を提供します。
 

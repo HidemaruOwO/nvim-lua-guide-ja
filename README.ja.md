@@ -1,5 +1,7 @@
 :arrow_upper_left: (迷子になった？ GitHub TOCを使いましょう！)
 
+**:warning: :warning: :warning: このガイドの最新版は、Neovimのドキュメントにあります。 [`:help lua-guide`](https://neovim.io/doc/user/lua-guide.html#lua-guide)を参照してください。 :warning: :warning: :warning:**
+
 # Getting started using Lua in Neovim
 
 ## はじめに
